@@ -13,6 +13,6 @@ public class PostServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("id");
-        req.getRequestDispatcher("/jsp/post.jsp").forward(req, resp);
+        req.getRequestDispatcher("/jsp/pos.jsp").forward(req,resp);
     }
 }
