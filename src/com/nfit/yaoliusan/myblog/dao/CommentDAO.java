@@ -9,7 +9,7 @@ public class CommentDAO {
         return null;
     }
 
-    public Comment addCommen(Comment comment){
+    public Comment addComment(Comment comment){
         return null;
     }
 }
