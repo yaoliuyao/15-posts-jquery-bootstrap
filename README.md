@@ -17,3 +17,8 @@
 ## 问题
 
 - DBUtils 该怎么去使用？
+- DataSource 不需要管 Connection
+```
+    Connection conn = getConnection(); // 成本太高
+    conn.close();
+```
