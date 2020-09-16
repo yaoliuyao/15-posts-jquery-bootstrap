@@ -17,8 +17,15 @@
 ## 问题
 
 - DBUtils 该怎么去使用？
-- DataSource 不需要管 Connection
-```
-    Connection conn = getConnection(); // 成本太高
-    conn.close();
-```
+- DataSource 不需要管，直接使用 Connection
+    ```
+      Connection conn = getConnection(); // 成本太高
+      conn.close();
+    ```
+## 接下来的任务
+
+#### 为新增博客，添加图片上传功能
+#### 将整个项目使用 ajax 进行重构
+#### 使用 jQuery 将整个项目进行重构
+#### 使用 bootstrap 将所有样式进行重构
+#### 增加分页等其他功能
