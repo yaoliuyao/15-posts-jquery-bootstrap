@@ -14,20 +14,21 @@
 - 在 Post 详情页面的下面，可以查看评论
 - 在评论的最后，有一个 form 表单，可以用来发表新的评论
 
-## 问题
-### DBUtils 该怎么去使用？
+## 问题反馈
+#### DBUtils 该怎么去使用？
 
 看代码，看示例。
 
-### DataSource 是啥?
+#### DataSource 是啥?
 
-暂时不需要管，直接使用 Connection
+暂时不需要管，直接使用 Connection。
 
-    ```
-      Connection conn = getConnection(); // 成本太高
-      conn.close();
-    ```
-### 如何排查数据库连接问题
+```
+  Connection conn = getConnection(); // 成本太高
+  conn.close();
+```
+
+#### 如何排查数据库连接问题
 
 基本步骤:
 1. 数据库服务有没有正常开启  1433
@@ -45,17 +46,20 @@
   + 查看所有监听的连接: `netstat -ano | findstr "LISTE"`
   + 查看所有 143 开始的端口: `netstat -ano | findstr 143`
   
-### 如何渲染评论
+#### 如何渲染评论
 
 comment
 - id
 - created 
 
+-------------
+
 热门评论:
-- select top 5 * from comment where ? order by clicks;
+- `select top 5 * from comment where ? order by clicks;`
+
 历史评论:
-- select * from comment where ? order by id desc;
-- select top 10 * from comment where ? order by created desc;
+- `select * from comment where ? order by id desc;`
+- `select top 10 * from comment where ? order by created desc;`
 
 ## 接下来的任务
 
