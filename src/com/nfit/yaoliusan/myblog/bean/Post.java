@@ -3,7 +3,7 @@ package com.nfit.yaoliusan.myblog.bean;
 import java.util.Date;
 
 public class Post {
-    private int id;
+    private Long id;
     private String title;
     private String content;
     private String author;
@@ -18,11 +18,11 @@ public class Post {
         this.author = author;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

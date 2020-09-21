@@ -3,18 +3,26 @@ package com.nfit.yaoliusan.myblog.bean;
 import java.util.Date;
 
 public class Comment {
-    private int id;
+    private Long id;
     private String content;
     private String author;
     private Date created;
-
     private Post post;
 
-    public int getId() {
+    public Comment() {
+    }
+
+    public Comment(String content, String author, Post post) {
+        this.content = content;
+        this.author = author;
+        this.post = post;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

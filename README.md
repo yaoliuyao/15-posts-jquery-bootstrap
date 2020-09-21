@@ -62,9 +62,9 @@ comment
 - `select top 10 * from comment where ? order by created desc;`
 
 ## 接下来的任务
-
 #### 为新增博客，添加图片上传功能
 #### 将整个项目使用 ajax 进行重构
 #### 使用 jQuery 将整个项目进行重构
 #### 使用 bootstrap 将所有样式进行重构
 #### 增加分页等其他功能
+#### MVVM: Vue.js/ReactJS.js/AngularJS

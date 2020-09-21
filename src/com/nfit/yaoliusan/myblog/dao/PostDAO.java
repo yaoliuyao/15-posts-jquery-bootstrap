@@ -1,16 +1,72 @@
 package com.nfit.yaoliusan.myblog.dao;
 
 import com.nfit.yaoliusan.myblog.bean.Post;
+import com.nfit.yaoliusan.myblog.utils.DBHelper;
+import org.apache.commons.dbutils.DbUtils;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
+
+import java.math.BigDecimal;
+import java.sql.Connection;
 import java.util.List;
 
 public class PostDAO {
 
-    public List<Post> getAll () throws Exception {
-        return null;
+    /**
+     * 获取所有文章
+     *
+     * @return 所有的 Posts
+     * @throws Exception 所有异常
+     */
+    public List<Post> getAllPosts() throws Exception {
+        Connection conn = DBHelper.getConnection();
+        String sql = "select id, title, content, author, created from post order by created Desc";
+        try {
+            return new QueryRunner().query(
+                    conn, sql, new BeanListHandler<Post>(Post.class));
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
     }
 
-    public Post addPost(Post post) {
-        return null;
+    /**
+     * 根据 PostId 获取文章
+     *
+     * @param id Post 的主键
+     * @return 某篇 Post
+     */
+    public Post getPostById(int id) throws Exception {
+        Connection conn = DBHelper.getConnection();
+        String sql = "select id, title, content, author, created from post where id = ?";
+        try {
+            return new QueryRunner().query(
+                     conn, sql, new BeanHandler<Post>(Post.class), id);
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
     }
 
+    /**
+     * 添加文章
+     *
+     * @param post 要插入的文章
+     * @return 带 Id 的文章
+     */
+    public Post addPost(Post post) throws Exception {
+        Connection conn = DBHelper.getConnection();
+        String sql = "insert into post (title, content, author) values (?, ?, ?)";
+        Object[] params = {
+                post.getTitle(), post.getContent(), post.getAuthor()
+        };
+        try {
+            QueryRunner run = new QueryRunner();
+            BigDecimal res = run.insert(conn, sql, new ScalarHandler<BigDecimal>(), params);
+            post.setId(res.longValue());
+            return post;
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
+    }
 }
