@@ -1,68 +1,47 @@
-# Posts
+# Posts (添加图片上传功能)
 
-## 基本要求
+## 前情回顾
 
-- 根据之前的需求分析，填充未完成的代码
-- 让业务在 Tomcat 中能够 **正常** 运行
-- 使用 [Apache DBUtils](https://mvnrepository.com/search?q=dbutils) 来处理数据库
+<pre>
+    1. GET 请求，参数是放在 URL 地址栏中发送到服务器的 /xxx?id=3&name=444
+    2. POST 请求，参数是放在请求体中发送的，所以地址栏看不到数据
+    3. enctype 表示数据的传输格式:
+       - application/x-www-form-urlencoded: id=3&name=3333
+       - multipart/form-data，表示数据将会被分段处理之后再发送
+</pre>
 
-## 业务简介
+## 预备知识
 
-- 首页能显示 Post 的列表
-- 首页的底部有一个 form 表单，通过它可以发布新的 Post
-- 点击 Post 可以进行详情页面
-- 在 Post 详情页面的下面，可以查看评论
-- 在评论的最后，有一个 form 表单，可以用来发表新的评论
+<pre>
+    HTML 中用来跟文件系统进行交互的手段只有一个:
+    - input type=file
 
-## 问题反馈
-#### DBUtils 该怎么去使用？
+    如果想要上传的话:
+    - 必须要用 POST 进行提交，这种方式，将会把数据封装在请求体中进行发送
+    - 必须指定 enctype 为 multipart/form-data，这样数据才会被正确分段处理并上传
+</pre>
 
-看代码，看示例。
+## 基本步骤
 
-#### DataSource 是啥?
+<pre>
+    前端页面中:
+    1. 写一个 form 表单，使用 POST 方法，并指定 enctype='multipart/form-data'
+    2. 使用 input type=file 来选择文件
 
-暂时不需要管，直接使用 Connection。
+    后台接受:
+    1. 要在 Servlet 上面添加 MultipartConfig 注解
+    2. 使用 req.getPart('name') 来接受图片
+    3. 使用 part.write('路径') 来保存图片到服务器的硬盘
+</pre>
 
-```
-  Connection conn = getConnection(); // 成本太高
-  conn.close();
-```
+## TODO
 
-#### 如何排查数据库连接问题
-
-基本步骤:
-1. 数据库服务有没有正常开启  1433
-2. 确定使用 smss 能不能正常连接上 sa/sa
-3. jdbc 驱动是否有问题
-4. 连接字符串有没有问题
-
-无法连接 1433 端口的问题:
-- 怀疑问题:
-  1. 数据库服务是否正常开启
-  2. 设置相应端口
-- 确定端口是否正常监听
-  + 打开 `cmd` 窗口
-  + 查看所有连接: `netstat -ano`
-  + 查看所有监听的连接: `netstat -ano | findstr "LISTE"`
-  + 查看所有 143 开始的端口: `netstat -ano | findstr 143`
-  
-#### 如何渲染评论
-
-comment
-- id
-- created 
-
--------------
-
-热门评论:
-- `select top 5 * from comment where ? order by clicks;`
-
-历史评论:
-- `select * from comment where ? order by id desc;`
-- `select top 10 * from comment where ? order by created desc;`
+- 页面端: 限制只能发送 jpg/png 格式
+- Servlet 端: 保存为正确的后缀名
+- Servlet 端: 限制上传图片的大小为 2M
+- 在新增文章 (post/add) 的功能中，添加一副图片做封面，并正确渲染
 
 ## 接下来的任务
-#### 为新增博客，添加图片上传功能
 #### 将整个项目使用 ajax 进行重构
 #### 使用 jQuery 将整个项目进行重构
 #### 使用 bootstrap 将所有样式进行重构
