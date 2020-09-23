@@ -13,7 +13,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @WebServlet("/upload")
-@MultipartConfig
+@MultipartConfig(
+        maxFileSize = -1,
+        maxRequestSize = -1,
+        fileSizeThreshold = 100000000
+)
 public class UploadServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

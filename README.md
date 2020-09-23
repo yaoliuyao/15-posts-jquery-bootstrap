@@ -34,6 +34,39 @@
     3. 使用 part.write('路径') 来保存图片到服务器的硬盘
 </pre>
 
+## 基本配置
+
+配置在类的上面:
+```java
+@MultipartConfig(
+        maxFileSize = -1,
+        maxRequestSize = -1,
+        fileSizeThreshold = 100000000
+)
+```
+
+配置在 xml 中:
+```xml
+    <servlet>
+        <servlet-name>xxx</servlet-name>
+        <servlet-class>test.UploadServlet</servlet-class>
+        <multipart-config>
+            <location>c:/hello</location>
+            <max-file-size>23</max-file-size>
+            <max-request-size>232323</max-request-size>
+            <file-size-threshold>222</file-size-threshold>
+        </multipart-config>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>xxx</servlet-name>
+        <url-pattern>/xxcsdf</url-pattern>
+    </servlet-mapping>
+```
+
+## 其他资源
+
+- http://commons.apache.org/proper/commons-fileupload/
+
 ## TODO
 
 - 页面端: 限制只能发送 jpg/png 格式
