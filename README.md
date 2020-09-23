@@ -29,7 +29,7 @@
     2. 使用 input type=file 来选择文件
 
     后台接受:
-    1. 要在 Servlet 上面添加 MultipartConfig 注解
+    1. 要在 Servlet 上面添加 `@MultipartConfig` 注解
     2. 使用 req.getPart('name') 来接受图片
     3. 使用 part.write('路径') 来保存图片到服务器的硬盘
 </pre>
