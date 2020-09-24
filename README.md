@@ -19,6 +19,14 @@
     如果想要上传的话:
     - 必须要用 POST 进行提交，这种方式，将会把数据封装在请求体中进行发送
     - 必须指定 enctype 为 multipart/form-data，这样数据才会被正确分段处理并上传
+  - 可以通过 accept 限定只能上传哪些类型的文件
+    1. accept='.jpg'
+    2. accept='.jpg,.png'
+    3. accept='image/jpeg'
+    4. accept='image/jpeg,image/png'
+    5. accept='image/*'
+  - 通过 multiple 来指定可以选择多个图片进行上传
+  - 可以通过 JS 结合 `URL.createObjectURL` 来实现文件的预览效果
 </pre>
 
 ## 基本步骤
@@ -66,6 +74,15 @@
 ## 其他资源
 
 - http://commons.apache.org/proper/commons-fileupload/
+
+## 基本问题
+### `getSubmittedFileName` 找不到
+
+- `getSubmittedFileName` 方法是从 Servlet 3.5 开始有的 (Tomcat7)
+- JAVAEE6 包是没有必要的 (servlet-api.jar/jsp-api.jar)
+- 在模块的依赖里面，添加 Tomcat 就可以了
+
+<img src="./img/tomcat-dep.png">
 
 ## TODO
 

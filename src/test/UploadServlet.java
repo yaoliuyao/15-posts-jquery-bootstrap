@@ -27,6 +27,7 @@ public class UploadServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Part shuaige = req.getPart("shuaige");
+        // req.getParts()
         // 保存为啥名字？
         // 保存到哪里？
         // 怎么限制大小，保证安全？

@@ -8,9 +8,37 @@
 <h3>文件上传:</h3>
 
 <form action="${pageContext.request.contextPath}/upload" method="post" enctype="multipart/form-data">
-    <input name="shuaige" type="file">
+    <input id="file" name="shuaige" type="file" accept="image/*">
     <button>点击上传</button>
 </form>
+
+<div>
+    <img style="width: 200px" id="preview" src="" title="预览区域">
+</div>
+
+<script>
+    document.querySelector("#file").addEventListener("change", (ev) => {
+        let fileInput = document.querySelector("#file");
+        let file = fileInput.files[0];
+
+        // 基本信息
+        console.log(file.type)
+        console.log(file.name)
+        console.log(file.size)
+
+        // 可以进行检验
+        if (file.size > 10 * 1024 * 1024) {
+            alert("图片太大，不能上传!");
+            fileInput.value = "";
+            return;
+        }
+
+        // 预览
+        let url = URL.createObjectURL(file);
+        console.log("Object URL: " + url);
+        document.querySelector("#preview").src = url;
+    });
+</script>
 
 <hr>
 
