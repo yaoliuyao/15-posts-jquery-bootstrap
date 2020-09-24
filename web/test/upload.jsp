@@ -3,14 +3,17 @@
 <head>
     <title>上传的示例</title>
     <style>
-        #clickme {
+        body {
             margin: 1em;
+        }
+        button {
+            margin-right: 2em;
             margin-bottom: 2em;
             outline: 0;
             border: 0;
             color: white;
             font-family: "隶书";
-            font-size: 24pt;
+            font-size: 14px;
             padding: 8px 20px;
             box-shadow: 0 0 5px #333;
             border-radius: 5px;
@@ -19,9 +22,14 @@
             cursor: pointer;
         }
 
-        #clickme:hover {
+        button:hover {
             background: red;
             transform: scale(1.2);
+        }
+
+        img {
+            width: 200px;
+            margin-bottom: 2em;
         }
     </style>
 </head>
@@ -31,19 +39,23 @@
 
 <form action="${pageContext.request.contextPath}/upload" method="post" enctype="multipart/form-data">
     <input style="display: none" id="file" name="shuaige" type="file" accept="image/*">
-    <button>点击上传</button>
 </form>
 
 <div>
     <button id="clickme">选我、点我</button>
+    <button id="submit">点击上传</button>
 </div>
 <div>
-    <img style="width: 200px" id="preview" src="" title="预览区域">
+    <img id="preview" src="" title="预览区域">
 </div>
 
 <script>
     document.querySelector("#clickme").addEventListener("click", () => {
         document.querySelector("#file").click();
+    });
+
+    document.querySelector("#submit").addEventListener("click", () => {
+        document.querySelector("form").submit();
     });
 
     document.querySelector("#file").addEventListener("change", (ev) => {
