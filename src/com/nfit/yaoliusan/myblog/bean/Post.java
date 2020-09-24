@@ -7,15 +7,17 @@ public class Post {
     private String title;
     private String content;
     private String author;
+    private String cover;
     private Date created;
 
     public Post() {
     }
 
-    public Post(String title, String content, String author) {
+    public Post(String title, String content, String author, String cover) {
         this.title = title;
         this.content = content;
         this.author = author;
+        this.cover = cover;
     }
 
     public Long getId() {
@@ -56,5 +58,13 @@ public class Post {
 
     public void setCreated(Date created) {
         this.created = created;
+    }
+
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
     }
 }

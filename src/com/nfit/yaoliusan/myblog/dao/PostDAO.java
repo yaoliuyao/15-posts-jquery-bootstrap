@@ -22,7 +22,7 @@ public class PostDAO {
      */
     public List<Post> getAllPosts() throws Exception {
         Connection conn = DBHelper.getConnection();
-        String sql = "select id, title, content, author, created from post order by created Desc";
+        String sql = "select id, title, content, author, cover, created from post order by created Desc";
         try {
             return new QueryRunner().query(
                     conn, sql, new BeanListHandler<Post>(Post.class));
@@ -56,9 +56,9 @@ public class PostDAO {
      */
     public Post addPost(Post post) throws Exception {
         Connection conn = DBHelper.getConnection();
-        String sql = "insert into post (title, content, author) values (?, ?, ?)";
+        String sql = "insert into post (title, content, author, cover) values (?, ?, ?, ?)";
         Object[] params = {
-                post.getTitle(), post.getContent(), post.getAuthor()
+                post.getTitle(), post.getContent(), post.getAuthor(), post.getCover()
         };
         try {
             QueryRunner run = new QueryRunner();

@@ -9,14 +9,12 @@
             background-size: 100% 100%;
             margin: 0px;
         }
-
         #a {
             width: 100%;
             height: 50px;
             position: fixed;
             background-color: white;
         }
-
         div#a {
             width: 1100px;
             padding-left: 40px;
@@ -24,16 +22,12 @@
             background: aliceblue;
             border-bottom: 1px solid skyblue;
         }
-
         div#a a {
             float: left;
             color: black;
             width: 50px;
-
-
             margin: 0 auto;
         }
-
         div#a ul {
             list-style-type: none;
             float: left;
@@ -41,14 +35,12 @@
             padding: 0px 0px;
             margin: 0 auto;
         }
-
         div#a ul li {
             text-decoration: none;
             float: left;
             /*padding: 10px 0px 45px 0;*/
             margin-right: 10px;
         }
-
         div#a ul li a {
             width: 60px;
             text-decoration: none;
@@ -56,11 +48,9 @@
             padding-top: 10px;
             margin-left: 50px;
         }
-
         div#a ul li a:hover {
             color: red;
         }
-
         #d {
             float: left;
             width: 665px;
@@ -78,38 +68,32 @@
             margin-top: 50px;
             margin-left: 100px;
         }
-
         div#s ul {
             list-style-type: none;
             list-style-position: inherit;
             padding: 20px;
             margin: 0px;
         }
-
         div#s ul li {
             text-decoration: none;
             padding: 10px 0px 20px 0px;
             width: 180px;
             height: 15px;
         }
-
         div#s ul li a {
             width: 100px;
             text-decoration: none;
             font-size: 15px;
             color: #333333;
         }
-
         .s1 {
             font-size: 20px;
         }
-
         div#s ul li:hover {
             background-color: LightSteelBlue;
             width: 180px;
             height: 15px;
         }
-
         div#h ul {
             list-style-type: none;
             list-style-position: inherit;
@@ -117,7 +101,6 @@
             margin: 0px;
 
         }
-
         div#h ul li {
             text-decoration: none;
             float: left;
@@ -126,42 +109,37 @@
             font-weight: bold;
             color: #999999;
         }
-
         div#h ul li:hover {
             color: red;
         }
 
-        section {
-            margin: 0 auto;
-            width: 600px;
-
-        }
 
         article {
-            margin-bottom: 1em;
-            padding: 1em;
+            display: flex;
+            flex-flow: row;
+            justify-content: space-between;
             box-shadow: 0 0 3px #999;
             background-color: white;
-            border-radius: 10px;
+            margin-top: 2em;
+            padding: 1em;
+            border-radius: 5px;
         }
-
-        #z {
+        article img {
+            height: 100%;
+            max-height: 150px;
+            width: auto;
+            border-radius: 50%;
+        }
+        article a {
             font-size: 20px;
             color: black;
             font-weight: bold;
             text-decoration: none;
         }
-
-        #z:hover {
+        article a:hover {
             color: red;
         }
-
-        span {
-            font-size: 12px;
-            color: gray;
-        }
-
-        #z2 {
+        article .desc {
             font-size: 10px;
             color: gray;
         }
@@ -170,13 +148,13 @@
             margin-top: 5em;
             margin-bottom: 3em;
         }
-        .add input, .add textarea, .add button {
+        .add .g1, .add .g2 {
             margin-top: 1em;
-            padding: 5px;
         }
         .add input {
             width: 200px;
             margin-right: 2em;
+            padding: 5px;
         }
         .add textarea {
             width: 100%;
@@ -189,10 +167,19 @@
             border-radius: 5px;
             box-shadow: 0 0 4px #333333;
             cursor: pointer;
-            background-image: linear-gradient(90deg, lightskyblue, lightgreen);
         }
-        .add button:hover {
-            background-image: linear-gradient(45deg, lightgreen, yellow);
+        .add label {
+            display: block;
+        }
+        .add .previewImg {
+            width: 100px;
+            margin-left: 1em;
+        }
+        .add .g2 {
+            display: flex;
+        }
+        .add #fileInput {
+            display: none;
         }
     </style>
 </head>
@@ -222,27 +209,49 @@
         <header>
             <h3>添加博客</h3>
         </header>
-        <form action="${pageContext.request.contextPath}/post/add" method="post">
+        <form action="${pageContext.request.contextPath}/post/add" method="post" enctype="multipart/form-data">
+            <input id="fileInput" type="file" name="cover" accept="image/*">
             <label class="g1">
                 <input name="title" placeholder="标题">
                 <input name="author" placeholder="作者">
+                <button>发表博客</button>
             </label>
-            <label>
+            <div class="g2">
                 <textarea name="content" placeholder="内容"></textarea>
-            </label>
-            <button>发表博客</button>
+                <img class="previewImg" src="${pageContext.request.contextPath}/img/mm.jpg" title="图片" alt="图片">
+            </div>
         </form>
     </section>
     <section class="posts">
         <c:forEach items="${posts}" var="post">
             <article>
-                <a Target="_blank" href="${pageContext.request.contextPath}/post?id=${post.id}" id="z">${post.title}</a>
-                <p id="z2"><span>来自${post.author}</span> <br>${post.created} </p>
-                <p id="z3"> ${post.content} </p>
+                <div>
+                    <header>
+                        <a Target="_blank" href="${pageContext.request.contextPath}/post?id=${post.id}">${post.title}</a>
+                    </header>
+                    <p class="desc"><span>来自${post.author}</span> ${post.created} </p>
+                    <p class="content"> ${post.content} </p>
+                </div>
+                <c:if test="${post.cover != null}">
+                    <img class="cover" src="${post.cover}" alt="封面">
+                </c:if>
             </article>
         </c:forEach>
     </section>
 </div>
+
+<script>
+    let fileInput = document.querySelector("#fileInput");
+    fileInput.addEventListener("change", () => {
+        let preview = document.querySelector(".previewImg");
+        preview.src = URL.createObjectURL(fileInput.files[0]);
+    });
+
+    document.querySelector(".previewImg").addEventListener("click", () => {
+        fileInput.click();
+    })
+</script>
+
 </body>
 </html>
 
