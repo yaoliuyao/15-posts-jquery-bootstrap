@@ -2,21 +2,50 @@
 <html>
 <head>
     <title>上传的示例</title>
+    <style>
+        #clickme {
+            margin: 1em;
+            margin-bottom: 2em;
+            outline: 0;
+            border: 0;
+            color: white;
+            font-family: "隶书";
+            font-size: 24pt;
+            padding: 8px 20px;
+            box-shadow: 0 0 5px #333;
+            border-radius: 5px;
+            background: linear-gradient(90deg, red, orange, yellow, green, blue);
+            transition: all 0.5s;
+            cursor: pointer;
+        }
+
+        #clickme:hover {
+            background: red;
+            transform: scale(1.2);
+        }
+    </style>
 </head>
 <body>
 
 <h3>文件上传:</h3>
 
 <form action="${pageContext.request.contextPath}/upload" method="post" enctype="multipart/form-data">
-    <input id="file" name="shuaige" type="file" accept="image/*">
+    <input style="display: none" id="file" name="shuaige" type="file" accept="image/*">
     <button>点击上传</button>
 </form>
 
+<div>
+    <button id="clickme">选我、点我</button>
+</div>
 <div>
     <img style="width: 200px" id="preview" src="" title="预览区域">
 </div>
 
 <script>
+    document.querySelector("#clickme").addEventListener("click", () => {
+        document.querySelector("#file").click();
+    });
+
     document.querySelector("#file").addEventListener("change", (ev) => {
         let fileInput = document.querySelector("#file");
         let file = fileInput.files[0];
