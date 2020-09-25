@@ -8,6 +8,7 @@
         /* 通用样式 */
         body {
             margin: 0;
+            padding: 0;
         }
         a {
             color: black;
@@ -18,16 +19,28 @@
         }
 
         /* 导航栏 */
-        #nav {
+        #banner {
+            margin: 0;
             padding: 1em;
-            display: flex;
+            font-size: 40px;
+            font-family: Serif;
             background: aliceblue;
             border-bottom: 1px solid skyblue;
         }
+        #nav {
+            margin: 0;
+            display: inline-flex;
+            width: 100%;
+            background: #333333;
+
+            position: sticky; top: 0;
+        }
         #nav a {
-            display: block;
-            padding: 5px;
-            margin-right: 1em;
+            color: white;
+            padding: 10px 20px;
+        }
+        #nav a:hover {
+            background: green;
         }
 
         /* 主体页面 */
@@ -41,39 +54,37 @@
         #main > aside {
             display: flex;
             flex-flow: column nowrap;
-            width: 300px;
+            flex: 0 0 140px;
             margin-top: 1em;
         }
         #main > aside a {
-            display: block;
-            padding: 5px;
-            margin-right: 1em;
+            padding: 8px;
         }
 
         /* 主体页面 - 内容 */
-        #main .content {
+        #main #content {
             padding: 0 2em;
         }
 
         /* 添加表单 */
-        .add .g1 {
+        .post-add .g1 {
             display: flex;
             margin-top: 1em;
         }
-        .add .g2 {
+        .post-add .g2 {
             display: flex;
             margin-top: 1em;
         }
-        .add input {
+        .post-add input {
             width: 200px;
             margin-right: 2em;
             padding: 5px;
         }
-        .add textarea {
+        .post-add textarea {
             width: 100%;
             height: 100px;
         }
-        .add button {
+        .post-add button {
             border: 0;
             outline: 0;
             padding: 8px 12px;
@@ -81,16 +92,16 @@
             box-shadow: 0 0 4px #333333;
             cursor: pointer;
         }
-        .add .previewImg {
+        .post-add .preview-img {
             width: 100px;
             margin-left: 1em;
         }
-        .add #fileInput {
+        .post-add .file-input {
             display: none;
         }
 
         /* 文章列表 */
-        .list {
+        .post-list {
             display: flex;
             flex-flow: row;
             justify-content: space-between;
@@ -100,34 +111,36 @@
             border-radius: 5px;
             margin: 2em auto;
         }
-        .list a {
+        .post-list a {
             font-size: 20px;
             font-weight: bold;
         }
-        .list .desc {
-            font-size: 10px;
-            color: gray;
-        }
-        .list img {
+        .post-list img {
             height: 100%;
             max-height: 150px;
             width: auto;
             border-radius: 50%;
         }
+        .post-list .desc {
+            font-size: 10px;
+            color: gray;
+        }
     </style>
 </head>
 
 <body>
-<header>
-    <nav id="nav">
-        <a href="#">首页</a>
-        <a href="#">新闻</a>
-        <a href="#">博问</a>
-        <a href="#">专区</a>
-        <a href="#">闪存</a>
-        <a href="#">发现</a>
-    </nav>
-</header>
+
+<div id="banner">
+    My Private Blog
+</div>
+<nav id="nav">
+    <a href="#">首页</a>
+    <a href="#">新闻</a>
+    <a href="#">博问</a>
+    <a href="#">专区</a>
+    <a href="#">闪存</a>
+    <a href="#">发现</a>
+</nav>
 
 <div id="main">
     <aside>
@@ -140,12 +153,12 @@
     </aside>
 
     <div id="content">
-        <section class="add">
+        <section class="post-add">
             <header>
                 <h3>添加博客</h3>
             </header>
             <form action="${pageContext.request.contextPath}/post/add" method="post" enctype="multipart/form-data">
-                <input id="fileInput" type="file" name="cover" accept="image/*">
+                <input class="file-input" type="file" name="cover" accept="image/*">
                 <div class="g1">
                     <input name="title" placeholder="标题">
                     <input name="author" placeholder="作者">
@@ -153,21 +166,21 @@
                 </div>
                 <div class="g2">
                     <textarea name="content" placeholder="内容"></textarea>
-                    <img class="previewImg" src="${pageContext.request.contextPath}/img/mm.jpg" title="图片" alt="图片">
+                    <img class="preview-img" src="${pageContext.request.contextPath}/img/mm.jpg" title="图片" alt="图片">
                 </div>
             </form>
         </section>
 
         <section class="posts">
             <c:forEach items="${posts}" var="post">
-                <article class="list">
+                <article class="post-list">
                     <div>
                         <header>
                             <a Target="_blank"
                                href="${pageContext.request.contextPath}/post?id=${post.id}">${post.title}</a>
                         </header>
                         <p class="desc"><span>来自${post.author}</span> ${post.created} </p>
-                        <p class="content"> ${post.content} </p>
+                        <p class="cont"> ${post.content} </p>
                     </div>
                     <c:if test="${post.cover != null}">
                         <img class="cover" src="${post.cover}" alt="封面">
@@ -179,13 +192,13 @@
 </div>
 
 <script>
-    let fileInput = document.querySelector("#fileInput");
+    let fileInput = document.querySelector(".file-input");
     fileInput.addEventListener("change", () => {
-        let preview = document.querySelector(".previewImg");
+        let preview = document.querySelector(".preview-img");
         preview.src = URL.createObjectURL(fileInput.files[0]);
     });
 
-    document.querySelector(".previewImg").addEventListener("click", () => {
+    document.querySelector(".preview-img").addEventListener("click", () => {
         fileInput.click();
     })
 </script>
