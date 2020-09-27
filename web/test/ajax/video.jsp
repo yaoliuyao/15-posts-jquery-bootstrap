@@ -1,29 +1,32 @@
-# Posts (异步请求, AJAX)
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>视频测试</title>
+    <style>
+        video {
+            width: 300px;
+        }
+        .comment {
+            margin-bottom: 1em;
+            padding: 1em;
+            background: #eeeeee;
+        }
+    </style>
+</head>
+<body>
 
-## 什么是 AJAX
+<div class="video">
+    <video controls src="${pageContext.request.contextPath}/video/idea_first.mp4"></video>
+</div>
+<div class="comments">
+    暂无评论
+</div>
+<div class="comment-form">
+    <input name="pinglun" placeholder="请填入您的评论">
+    <button>提交评论</button>
+</div>
 
-Asynchronous Javascript And XML，异步的 JS 和 XML。
-
-## 为什么要有 AJAX
-
-传统上，网页进行交互:
-- a 超链接 + form 表单
-- http 请求，基于 request/response，刷新页面
-- 每次请求结束，会刷新整个页面。这种行为有可能会打断当前页面的浏览状态 (看视频)
-- 每次加载页面，会要么看不见，要么全看见，页面的卡顿感非常严重
-
-所以，就出现了很多的技术解决上述的 **用户体验** 的问题:
-- iframe 方案
-- IE 上面的一些私有方案
-- 最后，胜出并成为标准的是 AJAX
-
-所以，AJAX 就是为了解决:
-- 让请求能够局部刷新页面，防止页面状态被打断
-- 让页面能够逐步、分次加载
-
-## 基本的使用步骤
-
-```js
+<script>
     // 发送异步请求
     document.querySelector(".comment-form button").addEventListener('click', () => {
         // 拿到我们要发送的内容
@@ -37,6 +40,7 @@ Asynchronous Javascript And XML，异步的 JS 和 XML。
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         // 注册事件 (委托浏览器在请求结束的时候触发这个逻辑)
         xhr.onload = function (e) {
+            // 充分利用 JS 的能力，更改页面的内容
             document.querySelector(".comments")
                 .insertAdjacentHTML("afterbegin", this.responseText);
             document.querySelector(".comment-form input").value = "";
@@ -44,10 +48,10 @@ Asynchronous Javascript And XML，异步的 JS 和 XML。
         // 开始发送请求！
         xhr.send("pinglun=" + pinglun);
     });
-```
 
-## 接下来的任务
-#### 使用 jQuery 将整个项目进行重构
-#### 使用 bootstrap 将所有样式进行重构
-#### 增加分页等其他功能
-#### MVVM: Vue.js/ReactJS.js/AngularJS
+
+
+</script>
+
+</body>
+</html>

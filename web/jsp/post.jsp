@@ -9,6 +9,8 @@
             top: 0;
             background: white;
             padding: 10px 3em;
+            width: 75vw;
+            margin: 0 auto;
         }
         h3 a {
             text-decoration: none;

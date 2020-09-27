@@ -21,7 +21,7 @@ import java.util.Date;
 public class UploadServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/test/upload.jsp").forward(req, resp);
+        req.getRequestDispatcher("/test/upload/upload.jsp").forward(req, resp);
     }
 
     @Override
@@ -52,6 +52,6 @@ public class UploadServlet extends HttpServlet {
         System.out.println("SavedDir Dir: " + savedDir);
 
         shuaige.write(savedDir + savedName);
-        resp.sendRedirect(req.getContextPath() + "/test/upload_success.jsp?path=" + savedName);
+        resp.sendRedirect(req.getContextPath() + "/test/upload/upload_success.jsp?path=" + savedName);
     }
 }
