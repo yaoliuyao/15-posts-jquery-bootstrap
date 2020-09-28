@@ -11,9 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
 
 
 @WebServlet("/post")
@@ -23,14 +21,8 @@ public class PostServlet extends HttpServlet {
         int id = Integer.parseInt(req.getParameter("id"));
         try {
             PostDAO postDAO = new PostDAO();
-            CommentDAO commentDAO = new CommentDAO();
-
             Post post = postDAO.getPostById(id);
-            List<Comment> comments = commentDAO.getCommentsByPostId(id);
-
             req.setAttribute("post", post);
-            req.setAttribute("comments", comments);
-
             req.getRequestDispatcher("/jsp/post.jsp").forward(req, resp);
         } catch (Exception e) {
             e.printStackTrace();

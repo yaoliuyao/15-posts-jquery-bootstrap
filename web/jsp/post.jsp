@@ -64,6 +64,12 @@
         label > input, label > textarea {
             width: 100%;
         }
+
+        .comments > .loading {
+            display: block;
+            width: 90px;
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body>
@@ -89,19 +95,7 @@
     </section>
 
     <section class="comments">
-        <c:forEach items="${comments}" var="comment" varStatus="s">
-            <div class="comment">
-                <header>
-                    第 ${s.count} 楼：${comment.author}
-                </header>
-                <p>
-                    ${comment.content}
-                </p>
-                <footer id="time">
-                    ${comment.created}
-                </footer>
-            </div>
-        </c:forEach>
+        <img class="loading" src="${pageContext.request.contextPath}/img/loading.svg">
     </section>
 
     <section class="comment-form">
@@ -121,5 +115,19 @@
         </form>
     </section>
 </div>
+
+<script>
+    function loadComments(postid) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/comments?" + "postid=" + postid);
+        xhr.onload = function (e) {
+            document.querySelector(".comments").innerHTML = this.responseText;
+        };
+        xhr.send(null);
+    }
+
+    loadComments(${post.id});
+</script>
+
 </body>
 </html>
