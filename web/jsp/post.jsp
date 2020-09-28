@@ -119,7 +119,7 @@
 <script>
     function loadComments(postid) {
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/comments?" + "postid=" + postid);
+        xhr.open("GET", "${pageContext.request.contextPath}/comments?" + "postid=" + postid);
         xhr.onload = function (e) {
             document.querySelector(".comments").innerHTML = this.responseText;
         };

@@ -61,7 +61,7 @@ function loadComments(postid) {
     // 创建
     var xhr = new XMLHttpRequest();
     // 设置
-    xhr.open("GET", "/comments?" + "postid=" + postid);
+    xhr.open("GET", "${pageContext.request.contextPath}/comments?" + "postid=" + postid);
     xhr.onload = function (e) {
         document.querySelector(".comments").innerHTML = this.responseText;
     };
