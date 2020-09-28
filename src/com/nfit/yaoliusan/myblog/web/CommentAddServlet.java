@@ -6,6 +6,7 @@ import com.nfit.yaoliusan.myblog.bean.Post;
 import com.nfit.yaoliusan.myblog.dao.CommentDAO;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -25,14 +26,9 @@ public class CommentAddServlet extends HttpServlet {
             Post post = new Post();
             post.setId(Long.parseLong(postId));
             new CommentDAO().addComment(new Comment(content, author, post));
-            // 返回页面:
-            // resp.sendRedirect();
-            // req.getRequestDispatcher().forward();
-            resp.sendRedirect(req.getContextPath() + "/post?id=" + postId);
         } catch (Exception e) {
             e.printStackTrace();
-            req.setAttribute("error", e.getLocalizedMessage());
-            req.getRequestDispatcher("/jsp/error.jsp").forward(req, resp);
+            throw new RuntimeException("添加错误");
         }
     }
 }

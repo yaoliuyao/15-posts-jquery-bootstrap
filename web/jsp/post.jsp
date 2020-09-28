@@ -99,24 +99,23 @@
     </section>
 
     <section class="comment-form">
-        <form method="post" action="${pageContext.request.contextPath}/comment/add">
-            <input type="hidden" name="postid" value="${post.id}">
-            <label>
-                <span>姓名</span>
-                <input name="author">
-            </label>
-            <label>
-                <span>评论内容</span>
-                <textarea name="content"></textarea>
-            </label>
-            <div>
-                <button>提交评论</button>
-            </div>
-        </form>
+        <label>
+            <span>姓名</span>
+            <input class="author" name="author">
+        </label>
+        <label>
+            <span>评论内容</span>
+            <textarea class="cont" name="content"></textarea>
+        </label>
+        <div>
+            <button>提交评论</button>
+        </div>
     </section>
 </div>
 
 <script>
+    // 加载列表
+
     function loadComments(postid) {
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "${pageContext.request.contextPath}/comments?" + "postid=" + postid);
@@ -127,6 +126,32 @@
     }
 
     loadComments(${post.id});
+
+    // 提交评论
+
+    function submitComment() {
+        var author = document.querySelector(".comment-form .author");
+        var content = document.querySelector(".comment-form .cont");
+
+        // 将需要的数据封装到 FormData 对象
+        var formData = new FormData();
+        formData.append("postid", ${post.id});
+        formData.append("author", author.value);
+        formData.append("content", content.value);
+
+        // 发送请求
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "${pageContext.request.contextPath}/comment/add");
+        xhr.onload = function () {
+            loadComments(${post.id});
+            window.scrollTo(0, 0);
+            author.value = "";
+            content.value = "";
+        }
+        xhr.send(formData);
+    }
+
+    document.querySelector(".comment-form button").addEventListener('click', submitComment);
 </script>
 
 </body>

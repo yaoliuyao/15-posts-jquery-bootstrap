@@ -1,5 +1,23 @@
 # Posts (异步请求, AJAX)
 
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
+**Table of Contents**
+
+- [Posts (异步请求, AJAX)](#posts-异步请求-ajax)
+    - [什么是 AJAX](#什么是-ajax)
+    - [为什么要有 AJAX](#为什么要有-ajax)
+    - [基本的使用步骤](#基本的使用步骤)
+    - [[例] 实现分步加载的核心代码](#例-实现分步加载的核心代码)
+    - [[例] 实现刷新局部页面的核心代码](#例-实现刷新局部页面的核心代码)
+    - [接下来的任务](#接下来的任务)
+        - [使用 jQuery 将整个项目进行重构](#使用-jquery-将整个项目进行重构)
+        - [使用 bootstrap 将所有样式进行重构](#使用-bootstrap-将所有样式进行重构)
+        - [增加分页等其他功能](#增加分页等其他功能)
+        - [MVVM: Vue.js/ReactJS.js/AngularJS](#mvvm-vuejsreactjsjsangularjs)
+
+<!-- markdown-toc end -->
+
+
 ## 什么是 AJAX
 
 Asynchronous Javascript And XML，异步的 JS 和 XML。
@@ -93,8 +111,74 @@ public class CommentListServlet extends HttpServlet {
 }
 ```
 
+## [例] 实现刷新局部页面的核心代码
+
+页面端，可以不需要 form 标签:
+```html
+<section class="comment-form">
+    <label>
+        <span>姓名</span>
+        <input class="author" name="author">
+    </label>
+    <label>
+        <span>评论内容</span>
+        <textarea class="cont" name="content"></textarea>
+    </label>
+    <div>
+        <button>提交评论</button>
+    </div>
+</section>
+```
+
+使用 JS 进行异步提交，并只刷新评论区域:
+```js
+function submitComment() {
+    var author = document.querySelector(".comment-form .author");
+    var content = document.querySelector(".comment-form .cont");
+
+    // 将需要的数据封装到 FormData 对象
+    var formData = new FormData();
+    formData.append("postid", ${post.id});
+    formData.append("author", author.value);
+    formData.append("content", content.value);
+
+    // 发送请求
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "${pageContext.request.contextPath}/comment/add");
+    xhr.onload = function () {
+        loadComments(${post.id});
+        window.scrollTo(0, 0);
+        author.value = "";
+        content.value = "";
+    }
+    xhr.send(formData);
+}
+
+document.querySelector(".comment-form button").addEventListener('click', submitComment);
+```
+
+后台代码做相应修改 (注意，这里忽略了异常处理):
+```java
+public class CommentAddServlet extends HttpServlet {
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String postId = req.getParameter("postid");
+        String author = req.getParameter("author");
+        String content = req.getParameter("content");
+        try {
+            Post post = new Post();
+            post.setId(Long.parseLong(postId));
+            new CommentDAO().addComment(new Comment(content, author, post));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("添加评论出错");
+        }
+    }
+}
+```
+
 ## 接下来的任务
-#### 使用 jQuery 将整个项目进行重构
-#### 使用 bootstrap 将所有样式进行重构
-#### 增加分页等其他功能
-#### MVVM: Vue.js/ReactJS.js/AngularJS
+### 使用 jQuery 将整个项目进行重构
+### 使用 bootstrap 将所有样式进行重构
+### 增加分页等其他功能
+### MVVM: Vue.js/ReactJS.js/AngularJS
