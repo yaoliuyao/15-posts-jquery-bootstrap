@@ -9,6 +9,7 @@
     - [基本的使用步骤](#基本的使用步骤)
     - [[例] 实现分步加载的核心代码](#例-实现分步加载的核心代码)
     - [[例] 实现刷新局部页面的核心代码](#例-实现刷新局部页面的核心代码)
+    - [当前小结: AJAX 相关的 API](#当前小结-ajax-相关的-api)
     - [接下来的任务](#接下来的任务)
         - [使用 jQuery 将整个项目进行重构](#使用-jquery-将整个项目进行重构)
         - [使用 bootstrap 将所有样式进行重构](#使用-bootstrap-将所有样式进行重构)
@@ -176,6 +177,57 @@ public class CommentAddServlet extends HttpServlet {
     }
 }
 ```
+
+## 当前小结: AJAX 相关的 API
+
+XmlHttpRequest:
+```js
+// 符合标准的语法
+var xhr = new XmlHttpRequest();
+
+// 旧的，兼容性的创建写法。因此出现了 jQuery 等框架
+var xhr=new xhr();
+function xhr(){
+    if(window.XMLHttpRequest) {
+       return window.XMLHttpRequest()
+    } else if (window.ActiveXObject) {
+       try {
+         return new ActiveObject("Microsoft.XMLHTTP")
+       } catch(e) {
+           try {
+             return new ActiveObject("Msxml2.XMLHTTP")
+           } catch(e) {
+           }
+       }
+  }
+}
+
+```
+
+属性:
+- `xhr.status/statusText` 返回码/返回描述。20X 表示成功，404 页面没找到，500 表示服务端异常
+- `xhr.responseType='json'`
+- `xhr.response` 返回的内容。返回的类型跟 responseType 匹配的
+- `xhr.responseText/responseXML` responseText 返回的就是原始的字符串
+- `xhr.readyState` 返回的是当前 xhr 请求的进度
+- `xhr.timeout=10` 设置超时的时间
+- `xhr.withCredentials` 后面再学，跨域
+
+方法:
+- `xhr.open(METHOD, URL, 是否要进行异步请求)` 打开一个[异步]请求的连接
+- `xhr.send(data|null)` 发送数据
+- `xhr.abort()` 将当前的异步请求停掉
+- `xhr.getResponseHeader()/setResponseHeader()` 获取或者设置请求的头部
+
+事件:
+- `onreadystatechange` 每次请求的状态发生变化的时候触发
+- `onload/onerror/ontimeout` 请求结束的各种状态
+- `onloadstart/onloadend` 注意 onloadend 和 onload
+- `onprogress/xhr.upload.ongprogress` 下载、上传的进度条
+
+注意一点:
+- 如果服务器返回的是 404 的结果，那么 onload/status==404
+- onerror 捕获的是请求本身出问题了，比如说网络中断
 
 ## 接下来的任务
 ### 使用 jQuery 将整个项目进行重构

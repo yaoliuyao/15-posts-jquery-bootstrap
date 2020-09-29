@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 @WebServlet("/comment/add")
+@MultipartConfig
 public class CommentAddServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
