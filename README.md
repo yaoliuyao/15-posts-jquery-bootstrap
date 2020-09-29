@@ -9,7 +9,9 @@
     - [基本的使用步骤](#基本的使用步骤)
     - [[例] 实现分步加载的核心代码](#例-实现分步加载的核心代码)
     - [[例] 实现刷新局部页面的核心代码](#例-实现刷新局部页面的核心代码)
+    - [[例] 将 loadComments 进行重构，直接返回 JSON 数据](#例-将-loadcomments-进行重构直接返回-json-数据)
     - [当前小结: AJAX 相关的 API](#当前小结-ajax-相关的-api)
+    - [JSON 简介](#json-简介)
     - [接下来的任务](#接下来的任务)
         - [使用 jQuery 将整个项目进行重构](#使用-jquery-将整个项目进行重构)
         - [使用 bootstrap 将所有样式进行重构](#使用-bootstrap-将所有样式进行重构)
@@ -178,6 +180,53 @@ public class CommentAddServlet extends HttpServlet {
 }
 ```
 
+## [例] 将 loadComments 进行重构，直接返回 JSON 数据
+
+前端:
+```js
+function loadComments(postid) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "${pageContext.request.contextPath}/comments?" + "postid=" + postid);
+    xhr.onload = function (e) {
+        if (this.status === 200) {
+            var comments = JSON.parse(this.responseText);
+            console.log(comments);
+            var result = "";
+            for (var i = 0; i < comments.length; i++) {
+                result += "<div class='comment'>";
+                result += "<header>" +comments[i].author + "</header>";
+                result += "<p>" +comments[i].content + "</p>";
+                result += "</div>";
+            }
+            document.querySelector(".comments").innerHTML = result;
+        } else {
+            document.querySelector(".comments").innerHTML = "<p>加载失败</p>";
+        }
+    };
+    xhr.send(null);
+}
+```
+
+后台:
+```java
+@WebServlet("/comments")
+public class CommentListServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int postid = Integer.parseInt(req.getParameter("postid"));
+        try {
+            CommentDAO commentDAO = new CommentDAO();
+            List<Comment> comments = commentDAO.getCommentsByPostId(postid);
+            PrintWriter writer = resp.getWriter();
+            writer.write(new Gson().toJson(comments));
+        } catch (Exception e) {
+            PrintWriter writer = resp.getWriter();
+            writer.write("<div class='error'>Load failed.</div>");
+        }
+    }
+}
+```
+
 ## 当前小结: AJAX 相关的 API
 
 XmlHttpRequest:
@@ -241,6 +290,19 @@ xhr.onload = function(e) {
    document.querySelector(".comments").innerHTML = this.responseText;
 }
 ```
+
+## JSON 简介
+
+JavaScript Object Notation。
+
+将 Java 对象跟 Json 字符串进行互相转换的 jar 包:
+- jackson
+- fastjson
+- gson (`String 字符串 = new Gson().toJSON(对象)`)
+
+在浏览器端，将 JSON 字符串跟 JS 对象进行互相转换的 API:
+- `JSON.parse(字符串)` 将字符串转换为对象
+- `JSON.stringify(对象)` 将对象转换为字符串
 
 ## 接下来的任务
 ### 使用 jQuery 将整个项目进行重构

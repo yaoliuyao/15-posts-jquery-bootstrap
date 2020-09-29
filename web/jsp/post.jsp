@@ -118,23 +118,23 @@
 
     function loadComments(postid) {
         var xhr = new XMLHttpRequest();
-        xhr.timeout = 100000000; // 设置超时时间
         xhr.open("GET", "${pageContext.request.contextPath}/comments?" + "postid=" + postid);
         xhr.onload = function (e) {
-            // 判断是否正确返回
-            console.log(this.status, this.statusText);
             if (this.status === 200) {
-                document.querySelector(".comments").innerHTML = this.responseText;
+                var comments = JSON.parse(this.responseText);
+                console.log(comments);
+                var result = "";
+                for (var i = 0; i < comments.length; i++) {
+                    result += "<div class='comment'>";
+                    result += "<header>" +comments[i].author + "</header>";
+                    result += "<p>" +comments[i].content + "</p>";
+                    result += "</div>";
+                }
+                document.querySelector(".comments").innerHTML = result;
             } else {
                 document.querySelector(".comments").innerHTML = "<p>加载失败</p>";
             }
         };
-        xhr.onerror = function (e) {
-            alert("出错了!");
-        }
-        xhr.ontimeout = function (e) {
-            alert("您太慢了！！！！")
-        }
         xhr.send(null);
     }
 

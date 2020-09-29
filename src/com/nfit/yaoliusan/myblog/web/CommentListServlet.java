@@ -1,5 +1,6 @@
 package com.nfit.yaoliusan.myblog.web;
 
+import com.google.gson.Gson;
 import com.nfit.yaoliusan.myblog.bean.Comment;
 import com.nfit.yaoliusan.myblog.dao.CommentDAO;
 
@@ -20,9 +21,8 @@ public class CommentListServlet extends HttpServlet {
         try {
             CommentDAO commentDAO = new CommentDAO();
             List<Comment> comments = commentDAO.getCommentsByPostId(postid);
-            req.setAttribute("comments", comments);
-            // req.setAttribute("comments", new CommentDAO().getCommentsByPostId(postid));
-            req.getRequestDispatcher("/jsp/comments.jsp").forward(req, resp);
+            PrintWriter writer = resp.getWriter();
+            writer.write(new Gson().toJson(comments));
         } catch (Exception e) {
             PrintWriter writer = resp.getWriter();
             writer.write("<div class='error'>Load failed.</div>");
