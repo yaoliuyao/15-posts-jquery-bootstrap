@@ -118,10 +118,23 @@
 
     function loadComments(postid) {
         var xhr = new XMLHttpRequest();
+        xhr.timeout = 100000000; // 设置超时时间
         xhr.open("GET", "${pageContext.request.contextPath}/comments?" + "postid=" + postid);
         xhr.onload = function (e) {
-            document.querySelector(".comments").innerHTML = this.responseText;
+            // 判断是否正确返回
+            console.log(this.status, this.statusText);
+            if (this.status === 200) {
+                document.querySelector(".comments").innerHTML = this.responseText;
+            } else {
+                document.querySelector(".comments").innerHTML = "<p>加载失败</p>";
+            }
         };
+        xhr.onerror = function (e) {
+            alert("出错了!");
+        }
+        xhr.ontimeout = function (e) {
+            alert("您太慢了！！！！")
+        }
         xhr.send(null);
     }
 

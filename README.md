@@ -229,6 +229,19 @@ function xhr(){
 - 如果服务器返回的是 404 的结果，那么 onload/status==404
 - onerror 捕获的是请求本身出问题了，比如说网络中断
 
+下面两种写法是等价的:
+```js
+xhr.onreadystatechange = function (e) {
+   if (this.readyState === 4) { // 4 表示请求结束
+       document.querySelector(".comments").innerHTML = this.responseText;
+   }
+}
+
+xhr.onload = function(e) {
+   document.querySelector(".comments").innerHTML = this.responseText;
+}
+```
+
 ## 接下来的任务
 ### 使用 jQuery 将整个项目进行重构
 ### 使用 bootstrap 将所有样式进行重构
