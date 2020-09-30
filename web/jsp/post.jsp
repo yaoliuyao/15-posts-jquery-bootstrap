@@ -70,6 +70,10 @@
             width: 90px;
             margin: 0 auto;
         }
+        .comment > header {
+            display: flex;
+            justify-content: space-between;
+        }
     </style>
 </head>
 <body>
@@ -87,7 +91,7 @@
             </div>
             <footer>
                 <a href="">回复</a>
-                <a href="">点赞</a>
+                <a href="" class="like-it">点赞 (<span class="num">${post.likes}</span>)</a>
                 <a href="">举报</a>
                 <a href="">分享</a>
             </footer>
@@ -126,7 +130,9 @@
                 var result = "";
                 for (var i = 0; i < comments.length; i++) {
                     result += "<div class='comment'>";
-                    result += "<header>" +comments[i].author + "</header>";
+                    result += "<header>" +
+                        "<span>" +comments[i].author + "</span>" +
+                        "<i class='del' onclick='doDelComment(" + comments[i].id + ")'>删除</i></header>";
                     result += "<p>" +comments[i].content + "</p>";
                     result += "</div>";
                 }
@@ -165,6 +171,40 @@
     }
 
     document.querySelector(".comment-form button").addEventListener('click', submitComment);
+
+    // 删除评论
+
+    function doDelComment(id) {
+        if (window.confirm("你是不是要删除 id 为 " + id + " 的评论?")) {
+            var xmlHttpRequest = new XMLHttpRequest();
+            xmlHttpRequest.open("GET", "${pageContext.request.contextPath}/comment/del?id=" + id);
+            xmlHttpRequest.onload = function (ev) {
+                var res = this.responseText;
+                if (this.responseText === "-1") {
+                    alert("删除失败");
+                } else {
+                    alert("删除成功");
+                    loadComments(${post.id});
+                }
+            };
+            xmlHttpRequest.send(null);
+        }
+    }
+
+    // 点赞
+
+    document.querySelector(".like-it").addEventListener('click', (ev) => {
+        ev.preventDefault(); // 禁止原先的跳转功能
+        var xmlHttpRequest = new XMLHttpRequest();
+        xmlHttpRequest.open("GET", "${pageContext.request.contextPath}/post/like?id=${post.id}");
+        xmlHttpRequest.onload = function () {
+            if (this.responseText !== "-1") {
+                var node = document.querySelector(".like-it .num");
+                node.innerText = parseInt(node.innerText) + 1;
+            }
+        }
+        xmlHttpRequest.send(null);
+    });
 </script>
 
 </body>

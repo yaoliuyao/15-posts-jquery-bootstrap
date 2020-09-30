@@ -9,6 +9,7 @@ public class Post {
     private String author;
     private String cover;
     private Date created;
+    private int likes;
 
     public Post() {
     }
@@ -66,5 +67,13 @@ public class Post {
 
     public void setCover(String cover) {
         this.cover = cover;
+    }
+
+    public int getLikes() {
+        return likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
     }
 }

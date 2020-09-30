@@ -39,7 +39,7 @@ public class PostDAO {
      */
     public Post getPostById(int id) throws Exception {
         Connection conn = DBHelper.getConnection();
-        String sql = "select id, title, content, author, created from post where id = ?";
+        String sql = "select id, title, content, author, likes, created from post where id = ?";
         try {
             return new QueryRunner().query(
                      conn, sql, new BeanHandler<Post>(Post.class), id);
@@ -65,6 +65,16 @@ public class PostDAO {
             BigDecimal res = run.insert(conn, sql, new ScalarHandler<BigDecimal>(), params);
             post.setId(res.longValue());
             return post;
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
+    }
+
+    public void like(String id) throws Exception {
+        Connection conn = DBHelper.getConnection();
+        String sql = "update post set likes = likes + 1 where id = ?";
+        try {
+            new QueryRunner().update(conn, sql, id);
         } finally {
             DbUtils.closeQuietly(conn);
         }

@@ -52,4 +52,14 @@ public class CommentDAO {
             DbUtils.closeQuietly(conn);
         }
     }
+
+    public void delete(String id) throws Exception {
+        Connection conn = DBHelper.getConnection();
+        String sql = "delete from comment where id = ?";
+        try {
+            new QueryRunner().update(conn, sql, id);
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
+    }
 }
