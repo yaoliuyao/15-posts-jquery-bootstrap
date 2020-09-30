@@ -31,11 +31,10 @@ public class PostAddServlet extends HttpServlet {
             Post post = postDAO.addPost(new Post(title, content, author, coverPath));
 
             // 跳转到详情页面更合理
-            resp.sendRedirect(req.getContextPath() + "/post?id=" + post.getId());
+            resp.getWriter().print(post.getId());
         } catch (Exception e) {
             e.printStackTrace();
-            req.setAttribute("error", e.getLocalizedMessage());
-            req.getRequestDispatcher("/jsp/error.jsp").forward(req, resp);
+            resp.getWriter().print("-1");
         }
     }
 }

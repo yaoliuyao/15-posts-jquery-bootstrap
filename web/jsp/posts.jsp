@@ -157,18 +157,18 @@
             <header>
                 <h3>添加博客</h3>
             </header>
-            <form action="${pageContext.request.contextPath}/post/add" method="post" enctype="multipart/form-data">
+            <div class="form">
                 <input class="file-input" type="file" name="cover" accept="image/*">
                 <div class="g1">
-                    <input name="title" placeholder="标题">
-                    <input name="author" placeholder="作者">
-                    <button>发表博客</button>
+                    <input name="title" class="title" placeholder="标题">
+                    <input name="author" class="author" placeholder="作者">
+                    <button class="submit-post">发表博客</button>
                 </div>
                 <div class="g2">
-                    <textarea name="content" placeholder="内容"></textarea>
+                    <textarea name="content" class="cont" placeholder="内容"></textarea>
                     <img class="preview-img" src="${pageContext.request.contextPath}/img/mm.jpg" title="图片" alt="图片">
                 </div>
-            </form>
+            </div>
         </section>
 
         <section class="posts">
@@ -201,6 +201,42 @@
     document.querySelector(".preview-img").addEventListener("click", () => {
         fileInput.click();
     })
+
+    // 发表博客
+
+    document.querySelector("button.submit-post").addEventListener('click', () => {
+        var fileInput = document.querySelector(".form .file-input");
+        var title = document.querySelector(".form .title");
+        var author = document.querySelector(".form .author");
+        var content = document.querySelector(".form .cont");
+
+        // 组装数据
+        var formData = new FormData();
+        formData.append("cover", fileInput.files[0]); // type=file
+        formData.append("title", title.value);
+        formData.append("author", author.value);
+        formData.append("content", content.value);
+
+        // 发送请求
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "${pageContext.request.contextPath}/post/add");
+        xhr.onload = function (ev) {
+            var id = this.responseText;
+            if (id === "-1") {
+                alert("添加失败!");
+            } else {
+                alert("添加成功！");
+                window.location.href="${pageContext.request.contextPath}/post?id=" + id;
+            }
+        };
+        xhr.send(formData);
+
+        // 清理工作
+        fileInput.value = "";
+        content.value = "";
+        title.value = "";
+        author.value = "";
+    });
 </script>
 
 </body>

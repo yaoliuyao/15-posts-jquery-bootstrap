@@ -10,6 +10,7 @@
     - [[例] 实现分步加载的核心代码](#例-实现分步加载的核心代码)
     - [[例] 实现刷新局部页面的核心代码](#例-实现刷新局部页面的核心代码)
     - [[例] 将 loadComments 进行重构，直接返回 JSON 数据](#例-将-loadcomments-进行重构直接返回-json-数据)
+    - [[例] 将博客上传更改为 Ajax 方式 (文件的上传)](#例-将博客上传更改为-ajax-方式-文件的上传)
     - [当前小结: AJAX 相关的 API](#当前小结-ajax-相关的-api)
     - [JSON 简介](#json-简介)
     - [接下来的任务](#接下来的任务)
@@ -222,6 +223,74 @@ public class CommentListServlet extends HttpServlet {
         } catch (Exception e) {
             PrintWriter writer = resp.getWriter();
             writer.write("<div class='error'>Load failed.</div>");
+        }
+    }
+}
+```
+## [例] 将博客上传更改为 Ajax 方式 (文件的上传)
+
+前端:
+```js
+document.querySelector("button.submit-post").addEventListener('click', () => {
+    var fileInput = document.querySelector(".form .file-input");
+    var title = document.querySelector(".form .title");
+    var author = document.querySelector(".form .author");
+    var content = document.querySelector(".form .cont");
+
+    // 组装数据
+    var formData = new FormData();
+    formData.append("cover", fileInput.files[0]); // type=file
+    formData.append("title", title.value);
+    formData.append("author", author.value);
+    formData.append("content", content.value);
+
+    // 发送请求
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "${pageContext.request.contextPath}/post/add");
+    xhr.onload = function (ev) {
+        var id = this.responseText;
+        if (id === "-1") {
+            alert("添加失败!");
+        } else {
+            alert("添加成功！");
+            window.location.href="${pageContext.request.contextPath}/post?id=" + id;
+        }
+    };
+    xhr.send(formData);
+
+    // 清理工作
+    fileInput.value = "";
+    content.value = "";
+    title.value = "";
+    author.value = "";
+});
+```
+
+后台:
+```java
+@WebServlet("/post/add")
+@MultipartConfig
+public class PostAddServlet extends HttpServlet {
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String author = req.getParameter("author");
+        String title = req.getParameter("title");
+        String content = req.getParameter("content");
+        Part cover = req.getPart("cover");
+        try {
+            // 将图片保存，并获取其路径名
+            String coverPath = "/img/" + System.currentTimeMillis() + "-" + cover.getSubmittedFileName();
+            cover.write(getServletContext().getRealPath("/") + coverPath);
+
+            // 所有信息入库
+            PostDAO postDAO = new PostDAO();
+            Post post = postDAO.addPost(new Post(title, content, author, coverPath));
+
+            // 跳转到详情页面更合理
+            resp.getWriter().print(post.getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.getWriter().print("-1");
         }
     }
 }
