@@ -79,4 +79,8 @@ public class PostDAO {
             DbUtils.closeQuietly(conn);
         }
     }
+
+    public void delete(String id) throws Exception {
+        // TODO: 3. 请实现数据库中的删除操作
+    }
 }

@@ -101,7 +101,7 @@
         }
 
         /* 文章列表 */
-        .post-list {
+        .post {
             display: flex;
             flex-flow: row;
             justify-content: space-between;
@@ -111,19 +111,23 @@
             border-radius: 5px;
             margin: 2em auto;
         }
-        .post-list a {
+        .post a {
             font-size: 20px;
             font-weight: bold;
         }
-        .post-list img {
+        .post img {
             height: 100%;
             max-height: 150px;
             width: auto;
             border-radius: 50%;
         }
-        .post-list .desc {
+        .post .desc {
             font-size: 10px;
             color: gray;
+        }
+        .post .del {
+            cursor: pointer;
+            color: cornflowerblue;
         }
     </style>
 </head>
@@ -173,13 +177,17 @@
 
         <section class="posts">
             <c:forEach items="${posts}" var="post">
-                <article class="post-list">
+                <article class="post" onclick="postAction(event)">
                     <div>
                         <header>
                             <a Target="_blank"
                                href="${pageContext.request.contextPath}/post?id=${post.id}">${post.title}</a>
                         </header>
-                        <p class="desc"><span>来自${post.author}</span> ${post.created} </p>
+                        <p class="desc">
+                            <span>来自${post.author}</span>
+                            <span>${post.created}</span>
+                            <i class="del" data-id="${post.id}">删除</i>
+                        </p>
                         <p class="cont"> ${post.content} </p>
                     </div>
                     <c:if test="${post.cover != null}">
@@ -237,6 +245,11 @@
         title.value = "";
         author.value = "";
     });
+
+    // TODO: 1. 删除博客
+    function postAction(ev) {
+        // 请在此添加删除逻辑
+    }
 </script>
 
 </body>
