@@ -177,7 +177,7 @@
 
         <section class="posts">
             <c:forEach items="${posts}" var="post">
-                <article class="post" onclick="postAction(event)">
+                <article class="post" data-id="${post.id}" onclick="postAction(event)">
                     <div>
                         <header>
                             <a Target="_blank"
@@ -186,8 +186,8 @@
                         <p class="desc">
                             <span>来自${post.author}</span>
                             <span>${post.created}</span>
-                            <i class="del" data-id="${post.id}">删除</i>
-                        </p>
+                            <i class="del">删除</i>
+                            <i class="likeit">点赞</i>
                         <p class="cont"> ${post.content} </p>
                     </div>
                     <c:if test="${post.cover != null}">
@@ -246,9 +246,29 @@
         author.value = "";
     });
 
-    // TODO: 1. 删除博客
+    // 删除博客 (事件代理)
+
     function postAction(ev) {
-        // 请在此添加删除逻辑
+        if (ev.target.classList.contains("del")) {
+            var post = ev.currentTarget; // ev.target 事件源 ev.currentTarget 事件绑到哪里了
+            var id = post.dataset["id"];
+
+            if (window.confirm("你是不是要删除 id 为 " + id + " 的博客?")) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "${pageContext.request.contextPath}/post/del?id=" + id);
+                xhr.onload = function (ev) {
+                    if (this.responseText === "-1") {
+                        alert("删除失败");
+                    } else {
+                        post.parentNode.removeChild(post);
+                        alert("删除成功");
+                    }
+                };
+                xhr.send(null);
+            }
+        } else if (ev.target.classList.contains("likeit")) {
+            alert("可是我不喜欢你")
+        }
     }
 </script>
 

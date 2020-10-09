@@ -1,6 +1,6 @@
 package com.nfit.yaoliusan.myblog.web;
 
-import com.nfit.yaoliusan.myblog.dao.CommentDAO;
+import com.nfit.yaoliusan.myblog.dao.PostDAO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,6 +13,13 @@ import java.io.IOException;
 public class PostDelServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // TODO: 2. 请在此添加删除逻辑
+        String id = req.getParameter("id");
+        try {
+            new PostDAO().delete(id);
+            resp.getWriter().print(id);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            resp.getWriter().print("-1");
+        }
     }
 }

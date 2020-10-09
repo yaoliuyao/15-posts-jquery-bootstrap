@@ -81,6 +81,12 @@ public class PostDAO {
     }
 
     public void delete(String id) throws Exception {
-        // TODO: 3. 请实现数据库中的删除操作
+        Connection conn = DBHelper.getConnection();
+        String sql = "delete from post where id = ?";
+        try {
+            new QueryRunner().update(conn, sql, id);
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
     }
 }
