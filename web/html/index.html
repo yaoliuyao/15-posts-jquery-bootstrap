@@ -122,6 +122,7 @@
         版权所有: 南方 IT 学院 163 班
     </p>
 </section>
+
 <div class="modal fade" id="addPostModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -222,7 +223,9 @@
          <div class="post" data-id="${post.id}">
             <div class="post-header row">
                 <div class="col-md-8">
-                    <h3>${post.title}</h3>
+                    <a href="/html/post.html?id=${post.id}">
+                        <h3>${post.title}</h3>
+                    </a>
                     <p>
                         ${post.content}
                     </p>
