@@ -70,11 +70,14 @@ public class PostDAO {
         }
     }
 
-    public void like(String id) throws Exception {
+    public int like(String id) throws Exception {
         Connection conn = DBHelper.getConnection();
         String sql = "update post set likes = likes + 1 where id = ?";
         try {
-            new QueryRunner().update(conn, sql, id);
+            QueryRunner runner = new QueryRunner();
+            runner.update(conn, sql, id);
+            sql = "select likes from post where id = ?";
+            return (int) runner.query(conn, sql, new ScalarHandler<>(), id);
         } finally {
             DbUtils.closeQuietly(conn);
         }

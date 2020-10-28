@@ -98,6 +98,10 @@
     </nav>
 </section>
 <section class="container wrapper">
+    <div class="alert alert-success alert-dismissible" style="display: none;" id="msg-tip" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <span></span>
+    </div>
     <div class="row">
         <div class="col-md-9 main">
             <div class="posts">
@@ -158,6 +162,22 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="myalert" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">提示信息</h4>
+            </div>
+            <div class="modal-body">
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <script>
     function inits() {
@@ -165,6 +185,7 @@
         $(".preview-img").click(() => $(".file-input").click());
         $(".file-input").change(() => $(".preview-img").prop("src", URL.createObjectURL($(this).get(0).files[0])));
         $(".post-save-btn").click(savePost);
+        $(".posts").on("click", ".post-like", likePost);
     }
     function loadPosts() {
         // 1. 发送 ajax
@@ -193,11 +214,12 @@
         }).done(function (post) {
             createPostNode(post).prependTo(".posts");
             $("#addPostModal").modal('hide');
+            showMessage("文件添加成功！");
         });
     }
     function createPostNode(post) {
         var tpl = `
-         <div class="post">
+         <div class="post" data-id="${post.id}">
             <div class="post-header row">
                 <div class="col-md-8">
                     <h3>${post.title}</h3>
@@ -221,6 +243,18 @@
             </div>
         </div>`;
         return $(tpl);
+    }
+    function likePost(event) {
+        var $this = $(this);
+        var id = $this.closest(".post").data("id");
+        $.get("/post/like?id=" + id, function (data) {
+            $this.find("i").text(data);
+        });
+    }
+    function showMessage(msg) {
+        // $("#msg-tip > span").text(msg).parent().show();
+        // alert(msg);
+        $("#myalert .modal-body p").text(msg).closest("#myalert").modal('show');
     }
 
     // 初始化

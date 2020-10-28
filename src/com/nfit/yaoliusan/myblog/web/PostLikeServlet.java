@@ -16,8 +16,8 @@ public class PostLikeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("id");
         try {
-            new PostDAO().like(id);
-            resp.getWriter().print(id);
+            int count = new PostDAO().like(id);
+            resp.getWriter().print(count);
         } catch (Exception exception) {
             exception.printStackTrace();
             resp.getWriter().print("-1");
