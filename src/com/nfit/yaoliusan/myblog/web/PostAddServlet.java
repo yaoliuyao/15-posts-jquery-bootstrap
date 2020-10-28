@@ -1,5 +1,6 @@
 package com.nfit.yaoliusan.myblog.web;
 
+import com.google.gson.Gson;
 import com.nfit.yaoliusan.myblog.bean.Post;
 import com.nfit.yaoliusan.myblog.dao.PostDAO;
 
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.IOException;
+import java.util.Date;
 
 @WebServlet("/post/add")
 @MultipartConfig
@@ -30,8 +32,9 @@ public class PostAddServlet extends HttpServlet {
             PostDAO postDAO = new PostDAO();
             Post post = postDAO.addPost(new Post(title, content, author, coverPath));
 
-            // 跳转到详情页面更合理
-            resp.getWriter().print(post.getId());
+            // 返回数据
+            post.setCreated(new Date());
+            resp.getWriter().print(new Gson().toJson(post));
         } catch (Exception e) {
             e.printStackTrace();
             resp.getWriter().print("-1");
