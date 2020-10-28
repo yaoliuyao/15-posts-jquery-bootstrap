@@ -4,6 +4,10 @@
 **Table of Contents**
 
 - [Posts (jQuery + ajax)](#posts-jquery--ajax)
+    - [首先，对页面进行设计](#首先对页面进行设计)
+    - [其次，使用 bootstrap 完成页面布局](#其次使用-bootstrap-完成页面布局)
+    - [然后，使用 jQuery 添加功能支持](#然后使用-jquery-添加功能支持)
+    - [最后，进行其他优化](#最后进行其他优化)
     - [jQuery](#jquery)
     - [Bootstrap](#bootstrap)
     - [接下来的任务](#接下来的任务)
@@ -13,6 +17,8 @@
 <!-- markdown-toc end -->
 
 ## 首先，对页面进行设计
+
+<img src="img/ux.png">
 
 ## 其次，使用 bootstrap 完成页面布局
 
@@ -297,6 +303,247 @@
 </html>
 ```
 
+
+
+## 然后，使用 jQuery 添加功能支持
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的博客</title>
+    <!-- 提供基本的样式、布局、组件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
+
+    <!-- 提供额外的，跟交互有关的组件功能，弹出层、tab 页切换 -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+    <style>
+        .wrapper {
+            margin-top: 80px;
+        }
+        .hot-tags, .hot-posts {
+            border: 1px solid grey;
+            height: 100px;
+            padding: 1em;
+            margin-top: 1em;
+            margin-bottom: 2em;
+        }
+        .others {
+            margin-top: 1em;
+            padding-top: 2em;
+            min-height: 80px;
+            background: #eeeeee;
+        }
+        .posts {
+            padding-right: 2em;
+        }
+        .post-header {
+            display: flex;
+            align-items: center;
+        }
+        .post-header img {
+            width: 100%;
+        }
+        .post {
+            margin-bottom: 2em;
+            padding-bottom: 2em;
+            border-bottom: 1px solid #eee;
+        }
+        .post-footer {
+            margin-top: 1em;
+        }
+        #addPostModal img {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<section>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">My Private Blog</a>
+        </div>
+
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">分类 <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="http://baidu.com">学习</a></li>
+                        <li><a href="#">娱乐</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">未知</a></li>
+                        <li><a href="#">琐事</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">标签</a></li>
+                <li><a href="#">关于我们</a></li>
+            </ul>
+            <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search">
+                </div>
+                <button type="submit" class="btn btn-default">搜索</button>
+            </form>
+            <ul class="nav navbar-nav navbar-right" style="padding-right: 1em">
+                <li>
+                    <a href="#">用户管理</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-target="#addPostModal" data-toggle="modal">添加博客</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</section>
+<section class="container wrapper">
+    <div class="row">
+        <div class="col-md-9 main">
+            <div class="posts">
+            </div>
+        </div>
+        <div class="col-md-3 aside">
+            <div class="hot-tags">
+                热门标签
+            </div>
+            <div class="hot-posts">
+                点击排行
+            </div>
+        </div>
+    </div>
+</section>
+<section class="others">
+    <p class="text-center">
+        版权所有: 南方 IT 学院 163 班
+    </p>
+</section>
+<div class="modal fade" id="addPostModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">添加博客</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <form>
+                            <div class="form-group">
+                                <label for="post-title">标题</label>
+                                <input type="text" class="form-control" id="post-title" name="title" placeholder="请输入标题">
+                            </div>
+                            <div class="form-group">
+                                <label for="post-content">内容</label>
+                                <textarea class="form-control" id="post-content" name="content" placeholder="请输入内容"></textarea>
+                            </div>
+                            <div class="form-group" style="display: none">
+                                <input class="file-input" type="file" name="cover" id="post-cover">
+                                <input type="hidden" name="author" value="张三">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-4">
+                        <img class="preview-img" src="../img/mm.jpg">
+                        <p>
+                            请点击选择图片
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary post-save-btn">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function inits() {
+        loadPosts();
+        $(".preview-img").click(() => $(".file-input").click());
+        $(".file-input").change(() => $(".preview-img").prop("src", URL.createObjectURL($(this).get(0).files[0])));
+        $(".post-save-btn").click(savePost);
+    }
+    function loadPosts() {
+        // 1. 发送 ajax
+        // 2. 数据，组装成 post 节点
+        // 3. 放到 DOM 相应位置
+        $.ajax({
+            method: "GET",
+            url: "/posts",
+            dataType: "json"
+        }).done(function (data) {
+            $.each(data, function (i, e) {
+                createPostNode(e).appendTo(".posts");
+            })
+        });
+    }
+    function savePost() {
+        var form = $("#addPostModal form").get(0);
+        var formData = new FormData(form);
+        $.ajax({
+            method: "post",
+            url: "/post/add",
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: "json"
+        }).done(function (post) {
+            createPostNode(post).prependTo(".posts");
+            $("#addPostModal").modal('hide');
+        });
+    }
+    function createPostNode(post) {
+        var tpl = `
+         <div class="post">
+            <div class="post-header row">
+                <div class="col-md-8">
+                    <h3>${post.title}</h3>
+                    <p>
+                        ${post.content}
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <img src="${post.cover}" class="img-thumbnail">
+                </div>
+            </div>
+            <div class="post-footer row">
+                <div class="col-md-2 post-author">${post.author}</div>
+                <div class="col-md-4 post-time">发布于 <i>${post.created}</i></div>
+                <div class="col-md-2"></div>
+                <div class="col-md-4">
+                    <span class="post-like">点赞 (<i>${post.likes}</i>) </span>
+                    <span class="post-comment">评论 (<i>17</i>) </span>
+                    <span class="post-share">分享 (<i>20</i>) </span>
+                </div>
+            </div>
+        </div>`;
+        return $(tpl);
+    }
+
+    // 初始化
+    inits();
+</script>
+
+</body>
+</html>
+```
+
+## 最后，进行其他优化
+
+pass
 
 ## jQuery
 
