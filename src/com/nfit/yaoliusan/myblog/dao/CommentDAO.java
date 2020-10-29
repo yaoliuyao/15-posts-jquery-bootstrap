@@ -4,6 +4,7 @@ import com.nfit.yaoliusan.myblog.bean.Comment;
 import com.nfit.yaoliusan.myblog.utils.DBHelper;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 
@@ -43,9 +44,10 @@ public class CommentDAO {
         try {
             // 添加的第三个参数，表名需要返回一个 Long 类型的主键
             // 所以，它返回的就是主键
-            BigDecimal res = new QueryRunner().insert(conn, sql, new ScalarHandler<BigDecimal>(), params);
-            comment.setId(res.longValue());
-            return comment;
+            QueryRunner runner = new QueryRunner();
+            BigDecimal res = runner.insert(conn, sql, new ScalarHandler<BigDecimal>(), params);
+            sql = "select id, postid, author, content, created from comment where id = ?";
+            return runner.query(conn, sql, new BeanHandler<>(Comment.class), res.longValue());
         } finally {
             // 千万不要忘记关闭
             // 要放到 finally 里，因为 finally 的语句不管有没有异常都会被执行

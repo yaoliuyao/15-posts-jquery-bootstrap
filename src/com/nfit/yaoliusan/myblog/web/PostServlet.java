@@ -1,6 +1,7 @@
 package com.nfit.yaoliusan.myblog.web;
 
 
+import com.google.gson.Gson;
 import com.nfit.yaoliusan.myblog.bean.Comment;
 import com.nfit.yaoliusan.myblog.bean.Post;
 import com.nfit.yaoliusan.myblog.dao.CommentDAO;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 
 
 @WebServlet("/post")
@@ -22,12 +24,10 @@ public class PostServlet extends HttpServlet {
         try {
             PostDAO postDAO = new PostDAO();
             Post post = postDAO.getPostById(id);
-            req.setAttribute("post", post);
-            req.getRequestDispatcher("/jsp/post.jsp").forward(req, resp);
+            resp.getWriter().print(new Gson().toJson(post));
         } catch (Exception e) {
             e.printStackTrace();
-            req.setAttribute("error", e.getLocalizedMessage());
-            req.getRequestDispatcher("/jsp/error.jsp").forward(req, resp);
+            resp.getWriter().print("-1");
         }
     }
 }

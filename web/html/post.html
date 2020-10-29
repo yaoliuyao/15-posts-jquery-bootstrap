@@ -44,6 +44,9 @@
         .comment p {
             padding: 1em 0;
         }
+        .comment-submit {
+            margin-top: 1em;
+        }
     </style>
 </head>
 <body>
@@ -100,89 +103,25 @@
         <div class="col-md-9 main">
             <div class="post">
                 <img src="../img/mm.jpg" width="100%" height="200px">
-                <h3>鲁迅先生的一声</h3>
-                <p>还是看到房价快速东方嘉盛 skdfj 都快放假还是看到房价快速东方嘉盛 skdfj 都快放假还是看到房价快速东方嘉盛 skdfj 都快放假还是看到房价快速东方嘉盛 skdfj 都快放假还是看到房价快速东方嘉盛 skdfj 都快放假还是看到房价快速东方嘉盛 skdfj 都快放假还是看到房价快速东方嘉盛 skdfj 都快放假还是看到房价快速东方嘉盛 skdfj 都快放假还是看到房价快速东方嘉盛 skdfj 都快放假还是看到房价快速东方嘉盛 skdfj 都快放假还是看到房价快速东方嘉盛 skdfj 都快放假还是看到房价快速东方嘉盛 skdfj 都快放假还是看到房价快速东方嘉盛 skdfj 都快放假还是看到房价快速东方嘉盛 skdfj 都快放假还是看到房价快速东方嘉盛 skdfj 都快放假还是看到房价快速东方嘉盛 skdfj 都快放假还是看到房价快速东方嘉盛 skdfj 都快放假还是看到房价快速东方嘉盛 skdfj 都快放假还是看到房价快速东方嘉盛 skdfj 都快放假还是看到房价快速东方嘉盛 skdfj 都快放假还是看到房价快速东方嘉盛 skdfj 都快放假还是看到房价快速东方嘉盛 skdfj 都快放假还是看到房价快速东方嘉盛 skdfj 都快放假</p>
+                <h3 class="post-title"></h3>
+                <p class="post-content"></p>
                 <div class="post-footer row">
-                    <div class="col-md-2 post-author">张三</div>
-                    <div class="col-md-4 post-time">发布于 <i>2020.2.22</i></div>
+                    <div class="col-md-2 post-author"></div>
+                    <div class="col-md-4 post-time">发布于 <i></i></div>
                     <div class="col-md-2"></div>
                     <div class="col-md-4">
-                        <span class="post-like">点赞 (<i>3K</i>) </span>
+                        <span class="post-like">点赞 (<i></i>) </span>
                         <span class="post-comment">评论 (<i>17</i>) </span>
                         <span class="post-share">分享 (<i>20</i>) </span>
                     </div>
                 </div>
             </div>
+            <div class="comment-form">
+                <textarea class="form-control" name="content" rows="3"></textarea>
+                <button class="btn comment-submit">发表评论</button>
+            </div>
             <h4 class="comments-title">评论列表</h4>
             <div class="comments">
-                <div class="comment">
-                    <header class="row">
-                        <div class="col-md-1">
-                            <img class="img-rounded" width="100%" height="100%" src="../img/mm.jpg">
-                        </div>
-                        <div class="col-md-11">
-                            <div>可爱到飞的起耶</div>
-                            <div>2020.1.22</div>
-                        </div>
-                    </header>
-                    <p>
-                        我觉得你说的挺有道理的，非常感谢你的评论!😀
-                    </p>
-                    <footer>
-                        回复 点赞 删除
-                    </footer>
-                </div>
-                <div class="comment">
-                    <header class="row">
-                        <div class="col-md-1">
-                            <img class="img-rounded" width="100%" height="100%" src="../img/mm.jpg">
-                        </div>
-                        <div class="col-md-11">
-                            <div>可爱到飞的起耶</div>
-                            <div>2020.1.22</div>
-                        </div>
-                    </header>
-                    <p>
-                        我觉得你说的挺有道理的，非常感谢你的评论!😀
-                    </p>
-                    <footer>
-                        回复 点赞 删除
-                    </footer>
-                </div>
-                <div class="comment">
-                    <header class="row">
-                        <div class="col-md-1">
-                            <img class="img-rounded" width="100%" height="100%" src="../img/mm.jpg">
-                        </div>
-                        <div class="col-md-11">
-                            <div>可爱到飞的起耶</div>
-                            <div>2020.1.22</div>
-                        </div>
-                    </header>
-                    <p>
-                        我觉得你说的挺有道理的，非常感谢你的评论!😀
-                    </p>
-                    <footer>
-                        回复 点赞 删除
-                    </footer>
-                </div>
-                <div class="comment">
-                    <header class="row">
-                        <div class="col-md-1">
-                            <img class="img-rounded" width="100%" height="100%" src="../img/mm.jpg">
-                        </div>
-                        <div class="col-md-11">
-                            <div>可爱到飞的起耶</div>
-                            <div>2020.1.22</div>
-                        </div>
-                    </header>
-                    <p>
-                        我觉得你说的挺有道理的，非常感谢你的评论!😀
-                    </p>
-                    <footer>
-                        回复 点赞 删除
-                    </footer>
-                </div>
             </div>
         </div>
         <div class="col-md-3 aside">
@@ -200,6 +139,91 @@
         版权所有: 南方 IT 学院 163 班
     </p>
 </section>
+
+
+<script>
+    var postid = getQueryString("id");
+
+    $(function () {
+        loadPost();
+        loadComments();
+
+        $(".comment-submit").click(saveComment);
+    });
+
+    function loadPost() {
+        $.ajax({
+            method: "get",
+            url: "/post?id=" + postid,
+            dataType: "json",
+            async: false
+        }).done(function (post) {
+            var $post = $(".post");
+            $post.find("img").attr("src", post.cover);
+            $post.find(".post-title").text(post.title);
+            $post.find(".post-content").html(post.content);
+            $post.find(".post-author").html(post.author);
+            $post.find(".post-time").html(post.created);
+            $post.find(".post-like i").html(post.likes);
+        });
+    }
+    function loadComments() {
+        $.ajax({
+            method: "GET",
+            url: "/comments?postid=" + postid,
+            dataType: "json"
+        }).done(function (posts) {
+            $.each(posts, function (i, e) {
+                createCommentNode(e).prependTo(".comments");
+            });
+        });
+    }
+    function saveComment() {
+        $.ajax({
+            method: "post",
+            url: "/comment/add",
+            data: {
+                postid: postid,
+                author: "李四",
+                content: $(".comment-form textarea").val()
+            },
+            dataType: "json"
+        }).done(function (data) {
+            $(".comment-form textarea").val("");
+            createCommentNode(data).prependTo(".comments");
+        });
+    }
+    function createCommentNode(comment) {
+        var tpl = `
+        <div class="comment">
+            <header class="row">
+                <div class="col-md-1">
+                    <img class="img-rounded" width="100%" height="100%" src="../img/mm.jpg">
+                </div>
+                <div class="col-md-11">
+                    <div>${comment.author}</div>
+                    <div>${comment.created}</div>
+                </div>
+            </header>
+            <p>
+                ${comment.content}
+            </p>
+            <footer>
+                回复 点赞 删除
+            </footer>
+        </div>`;
+        return $(tpl);
+    }
+    function getQueryString(name) {
+        let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        let r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+            return decodeURIComponent(r[2]);
+        }
+        return null;
+    }
+
+</script>
 
 
 </body>

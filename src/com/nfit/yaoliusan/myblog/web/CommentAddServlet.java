@@ -1,6 +1,7 @@
 package com.nfit.yaoliusan.myblog.web;
 
 
+import com.google.gson.Gson;
 import com.nfit.yaoliusan.myblog.bean.Comment;
 import com.nfit.yaoliusan.myblog.bean.Post;
 import com.nfit.yaoliusan.myblog.dao.CommentDAO;
@@ -26,7 +27,8 @@ public class CommentAddServlet extends HttpServlet {
         try {
             Post post = new Post();
             post.setId(Long.parseLong(postId));
-            new CommentDAO().addComment(new Comment(content, author, post));
+            Comment comment = new CommentDAO().addComment(new Comment(content, author, post));
+            resp.getWriter().write(new Gson().toJson(comment));
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("添加错误");
