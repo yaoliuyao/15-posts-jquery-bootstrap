@@ -34,7 +34,10 @@
             align-items: center;
         }
         .post-header img {
-            width: 100%;
+            width: 90%;
+        }
+        .post-content {
+            align-self: flex-start;
         }
         .post {
             margin-bottom: 2em;
@@ -222,7 +225,7 @@
         var tpl = `
          <div class="post" data-id="${post.id}">
             <div class="post-header row">
-                <div class="col-md-8">
+                <div class="col-md-8 post-content">
                     <a href="/html/post.html?id=${post.id}">
                         <h3>${post.title}</h3>
                     </a>
@@ -230,7 +233,7 @@
                         ${post.content}
                     </p>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 post-cover">
                     <img src="${post.cover}" class="img-thumbnail">
                 </div>
             </div>

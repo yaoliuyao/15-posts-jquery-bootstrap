@@ -1,6 +1,5 @@
 package com.nfit.yaoliusan.myblog.web;
 
-import com.nfit.yaoliusan.myblog.dao.CommentDAO;
 import com.nfit.yaoliusan.myblog.dao.PostDAO;
 
 import javax.servlet.ServletException;
