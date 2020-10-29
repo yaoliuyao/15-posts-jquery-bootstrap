@@ -5,11 +5,10 @@
 
 - [Posts (jQuery + ajax)](#posts-jquery--ajax)
     - [首先，对页面进行设计](#首先对页面进行设计)
-    - [其次，使用 bootstrap 完成页面布局](#其次使用-bootstrap-完成页面布局)
-    - [然后，使用 jQuery 添加功能支持](#然后使用-jquery-添加功能支持)
+    - [其次，使用 bootstrap 完成首页布局](#其次使用-bootstrap-完成首页布局)
+    - [然后，使用 jQuery 添加首页功能](#然后使用-jquery-添加首页功能)
+    - [之后，详情页面是同样的逻辑](#之后详情页面是同样的逻辑)
     - [最后，进行其他优化](#最后进行其他优化)
-    - [jQuery](#jquery)
-    - [Bootstrap](#bootstrap)
     - [接下来的任务](#接下来的任务)
         - [增加分页等其他功能](#增加分页等其他功能)
         - [MVVM: Vue.js/ReactJS.js/AngularJS](#mvvm-vuejsreactjsjsangularjs)
@@ -20,7 +19,7 @@
 
 <img src="img/ux.png">
 
-## 其次，使用 bootstrap 完成页面布局
+## 其次，使用 bootstrap 完成首页布局
 
 ```html
 <!DOCTYPE html>
@@ -305,7 +304,7 @@
 
 
 
-## 然后，使用 jQuery 添加功能支持
+## 然后，使用 jQuery 添加首页功能
 
 ```html
 <!DOCTYPE html>
@@ -575,17 +574,246 @@
 </html>
 ```
 
+## 之后，详情页面是同样的逻辑
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>博客</title>
+    <!-- 提供基本的样式、布局、组件 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
+
+    <!-- 提供额外的，跟交互有关的组件功能，弹出层、tab 页切换 -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif;
+        }
+        .main {
+            min-height: 400px;
+        }
+        .hot-tags, .hot-posts {
+            border: 1px solid grey;
+            height: 100px;
+            padding: 1em;
+            margin-top: 1em;
+            margin-bottom: 2em;
+        }
+        .others {
+            margin-top: 1em;
+            padding-top: 2em;
+            min-height: 80px;
+            background: #eeeeee;
+        }
+        .post {
+            margin: 1em 0 3em 0;
+        }
+        .post p {
+            font-size: 16px;
+            line-height: 24px;
+        }
+        .comment {
+            margin: 15px 0;
+            padding: 15px 8px;
+            border-bottom: 1px solid #eee;
+        }
+        .comment p {
+            padding: 1em 0;
+        }
+        .comment-submit {
+            margin-top: 1em;
+        }
+    </style>
+</head>
+<body>
+
+<section>
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">My Private Blog</a>
+        </div>
+
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">分类 <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="http://baidu.com">学习</a></li>
+                        <li><a href="#">娱乐</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">未知</a></li>
+                        <li><a href="#">琐事</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">标签</a></li>
+                <li><a href="#">关于我们</a></li>
+            </ul>
+            <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search">
+                </div>
+                <button type="submit" class="btn btn-default">搜索</button>
+            </form>
+            <ul class="nav navbar-nav navbar-right" style="padding-right: 1em">
+                <li>
+                    <a href="#">用户管理</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-target="#addPostModal" data-toggle="modal">添加博客</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</section>
+<section class="container wrapper">
+    <div class="row">
+        <div class="col-md-9 main">
+            <div class="post">
+                <img src="../img/mm.jpg" width="100%" height="200px">
+                <h3 class="post-title"></h3>
+                <p class="post-content"></p>
+                <div class="post-footer row">
+                    <div class="col-md-2 post-author"></div>
+                    <div class="col-md-4 post-time">发布于 <i></i></div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-4">
+                        <span class="post-like">点赞 (<i></i>) </span>
+                        <span class="post-comment">评论 (<i>17</i>) </span>
+                        <span class="post-share">分享 (<i>20</i>) </span>
+                    </div>
+                </div>
+            </div>
+            <div class="comment-form">
+                <textarea class="form-control" name="content" rows="3"></textarea>
+                <button class="btn comment-submit">发表评论</button>
+            </div>
+            <h4 class="comments-title">评论列表</h4>
+            <div class="comments">
+            </div>
+        </div>
+        <div class="col-md-3 aside">
+            <div class="hot-tags">
+                相关推荐
+            </div>
+            <div class="hot-posts">
+                猜你喜欢
+            </div>
+        </div>
+    </div>
+</section>
+<section class="others">
+    <p class="text-center">
+        版权所有: 南方 IT 学院 163 班
+    </p>
+</section>
+
+
+<script>
+    var postid = getQueryString("id");
+
+    $(function () {
+        loadPost();
+        loadComments();
+
+        $(".comment-submit").click(saveComment);
+    });
+
+    function loadPost() {
+        $.ajax({
+            method: "get",
+            url: "/post?id=" + postid,
+            dataType: "json",
+            async: false
+        }).done(function (post) {
+            var $post = $(".post");
+            $post.find("img").attr("src", post.cover);
+            $post.find(".post-title").text(post.title);
+            $post.find(".post-content").html(post.content);
+            $post.find(".post-author").html(post.author);
+            $post.find(".post-time").html(post.created);
+            $post.find(".post-like i").html(post.likes);
+        });
+    }
+    function loadComments() {
+        $.ajax({
+            method: "GET",
+            url: "/comments?postid=" + postid,
+            dataType: "json"
+        }).done(function (posts) {
+            $.each(posts, function (i, e) {
+                createCommentNode(e).prependTo(".comments");
+            });
+        });
+    }
+    function saveComment() {
+        $.ajax({
+            method: "post",
+            url: "/comment/add",
+            data: {
+                postid: postid,
+                author: "李四",
+                content: $(".comment-form textarea").val()
+            },
+            dataType: "json"
+        }).done(function (data) {
+            $(".comment-form textarea").val("");
+            createCommentNode(data).prependTo(".comments");
+        });
+    }
+    function createCommentNode(comment) {
+        var tpl = `
+        <div class="comment">
+            <header class="row">
+                <div class="col-md-1">
+                    <img class="img-rounded" width="100%" height="100%" src="../img/mm.jpg">
+                </div>
+                <div class="col-md-11">
+                    <div>${comment.author}</div>
+                    <div>${comment.created}</div>
+                </div>
+            </header>
+            <p>
+                ${comment.content}
+            </p>
+            <footer>
+                回复 点赞 删除
+            </footer>
+        </div>`;
+        return $(tpl);
+    }
+    function getQueryString(name) {
+        let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        let r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+            return decodeURIComponent(r[2]);
+        }
+        return null;
+    }
+
+</script>
+
+
+</body>
+</html>
+```
+
 ## 最后，进行其他优化
 
-pass
-
-## jQuery
-
-$.xxx;
-
-## Bootstrap
-
-class="col-md-3"
+- 缺失功能的添加
+- 分页功能
+- 页面的细节优化
 
 ## 接下来的任务
 ### 增加分页等其他功能
