@@ -1,6 +1,7 @@
 package com.nfit.yaoliusan.myblog.web;
 
 import com.nfit.yaoliusan.myblog.dao.CommentDAO;
+import com.nfit.yaoliusan.myblog.vo.ResultVO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,10 +17,10 @@ public class CommentDelServlet extends HttpServlet {
         String id = req.getParameter("id");
         try {
             new CommentDAO().delete(id);
-            resp.getWriter().print(id);
+            resp.getWriter().print(ResultVO.ok(id).toJSON());
         } catch (Exception exception) {
             exception.printStackTrace();
-            resp.getWriter().print("-1");
+            resp.getWriter().print(ResultVO.err(112, exception.getLocalizedMessage()).toJSON());
         }
     }
 }

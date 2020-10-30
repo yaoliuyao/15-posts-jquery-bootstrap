@@ -157,14 +157,17 @@
             url: "/post?id=" + postid,
             dataType: "json",
             async: false
-        }).done(function (post) {
-            var $post = $(".post");
-            $post.find("img").attr("src", post.cover);
-            $post.find(".post-title").text(post.title);
-            $post.find(".post-content").html(post.content);
-            $post.find(".post-author").html(post.author);
-            $post.find(".post-time").html(post.created);
-            $post.find(".post-like i").html(post.likes);
+        }).done(function (data) {
+            if (data.code === 1) {
+                var $post = $(".post");
+                var post = data.data;
+                $post.find("img").attr("src", post.cover);
+                $post.find(".post-title").text(post.title);
+                $post.find(".post-content").html(post.content);
+                $post.find(".post-author").html(post.author);
+                $post.find(".post-time").html(post.created);
+                $post.find(".post-like i").html(post.likes);
+            }
         });
     }
     function loadComments() {
@@ -172,10 +175,15 @@
             method: "GET",
             url: "/comments?postid=" + postid,
             dataType: "json"
-        }).done(function (posts) {
-            $.each(posts, function (i, e) {
-                createCommentNode(e).prependTo(".comments");
-            });
+        }).done(function (data) {
+            if (data.code === 1) {
+                $.each(data.data, function (i, e) {
+                    createCommentNode(e).prependTo(".comments");
+                });
+            } else {
+                $(".comments").empty();
+                $(`<h1>加载出错，请点击刷新</h1>`).click(loadComments).prependTo(".comments");
+            }
         });
     }
     function saveComment() {

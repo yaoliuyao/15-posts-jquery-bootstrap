@@ -200,9 +200,13 @@
             url: "/posts",
             dataType: "json"
         }).done(function (data) {
-            $.each(data, function (i, e) {
-                createPostNode(e).appendTo(".posts");
-            })
+            if (data.code === 1) {
+                $.each(data.data, function (i, e) {
+                    createPostNode(e).appendTo(".posts");
+                })
+            } else {
+                alert(data.message);
+            }
         });
     }
     function savePost() {

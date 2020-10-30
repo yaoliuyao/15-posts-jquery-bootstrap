@@ -3,6 +3,7 @@ package com.nfit.yaoliusan.myblog.web;
 import com.google.gson.Gson;
 import com.nfit.yaoliusan.myblog.bean.Comment;
 import com.nfit.yaoliusan.myblog.dao.CommentDAO;
+import com.nfit.yaoliusan.myblog.vo.ResultVO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,10 +23,11 @@ public class CommentListServlet extends HttpServlet {
             CommentDAO commentDAO = new CommentDAO();
             List<Comment> comments = commentDAO.getCommentsByPostId(postid);
             PrintWriter writer = resp.getWriter();
-            writer.write(new Gson().toJson(comments));
+            writer.print(ResultVO.ok(comments).toJSON());
         } catch (Exception e) {
+            e.printStackTrace();
             PrintWriter writer = resp.getWriter();
-            writer.write("<div class='error'>Load failed.</div>");
+            writer.print(ResultVO.err(113, e.getLocalizedMessage()).toJSON());
         }
     }
 }

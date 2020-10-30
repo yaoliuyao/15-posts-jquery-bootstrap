@@ -8,6 +8,7 @@
     - [其次，使用 bootstrap 完成首页布局](#其次使用-bootstrap-完成首页布局)
     - [然后，使用 jQuery 添加首页功能](#然后使用-jquery-添加首页功能)
     - [之后，详情页面是同样的逻辑](#之后详情页面是同样的逻辑)
+    - [接下来，封装一个 ResultVO 用来简化、统一数据的返回](#接下来封装一个-resultvo-用来简化统一数据的返回)
     - [最后，进行其他优化](#最后进行其他优化)
     - [接下来的任务](#接下来的任务)
         - [增加分页等其他功能](#增加分页等其他功能)
@@ -807,6 +808,91 @@
 
 </body>
 </html>
+```
+
+## 接下来，封装一个 ResultVO 用来简化、统一数据的返回
+
+ResultVO 示例
+```java
+public class ResultVO {
+    private int code = 1;
+    private String message;
+    private Object data;
+
+    private ResultVO() {}
+
+    public String toJSON () {
+        Gson gson = new Gson();
+        return gson.toJson(this);
+    }
+
+    public static ResultVO ok(Object data) {
+        ResultVO vo = new ResultVO();
+        vo.setData(data);
+        return vo;
+    }
+
+    public static ResultVO err(int code, String message) {
+        ResultVO vo = new ResultVO();
+        vo.setCode(code);
+        vo.setMessage(message);
+        return vo;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
+    }
+
+}
+```
+
+使用方式:
+```java
+try {
+    String data = ResultVO.ok(posts).toJSON();
+    resp.getWriter().print(data);
+} catch (Exception e) {
+    e.printStackTrace();
+    String error = ResultVO.err(114, e.getLocalizedMessage()).toJSON();
+    resp.getWriter().print(error);
+}
+```
+
+页面端:
+```js
+ $.ajax({
+    method: "GET",
+    url: "/posts",
+    dataType: "json"
+}).done(function (data) {
+    if (data.code === 1) {
+        $.each(data.data, function (i, e) {
+            createPostNode(e).appendTo(".posts");
+        })
+    } else {
+        alert(data.message);
+    }
+});
 ```
 
 ## 最后，进行其他优化

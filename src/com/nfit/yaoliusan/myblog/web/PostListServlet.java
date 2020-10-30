@@ -4,6 +4,7 @@ package com.nfit.yaoliusan.myblog.web;
 import com.google.gson.Gson;
 import com.nfit.yaoliusan.myblog.bean.Post;
 import com.nfit.yaoliusan.myblog.dao.PostDAO;
+import com.nfit.yaoliusan.myblog.vo.ResultVO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @WebServlet("/posts")
 public class PostListServlet extends HttpServlet {
@@ -22,11 +24,11 @@ public class PostListServlet extends HttpServlet {
         try {
             List<Post> posts = dao.getAllPosts();
             PrintWriter writer = resp.getWriter();
-            String json = new Gson().toJson(posts);
-            writer.write(json);
+            writer.print(ResultVO.ok(posts).toJSON());
         } catch (Exception e) {
+            e.printStackTrace();
             PrintWriter writer = resp.getWriter();
-            writer.write(1);
+            writer.print(ResultVO.err(114, e.getLocalizedMessage()).toJSON());
         }
     }
 }
