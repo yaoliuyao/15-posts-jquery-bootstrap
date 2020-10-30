@@ -186,9 +186,24 @@
 <script>
     function inits() {
         loadPosts();
+        // 点击选择图片
         $(".preview-img").click(() => $(".file-input").click());
-        $(".file-input").change(() => $(".preview-img").prop("src", URL.createObjectURL($(this).get(0).files[0])));
+        // 当图片被选择时，进行预览
+        $(".file-input").change(() => {
+            // 箭头函数是没有自己的作用域的，偏平的
+            // 在箭头函数内部，是没有 this 的
+            // 在这个地方的 this，其实是外部的 this
+            // this = document.querySelector('.file-input')
+            // 方案1:
+            // 将箭头函数改为普通函数，这样 this 才会正常
+            // 方案2:
+            // 使用箭头函数，但是不使用 this 变量
+            var url = URL.createObjectURL($(".file-input").get(0).files[0]);
+            $(".preview-img").prop("src", url)
+        });
+        // 保存按钮
         $(".post-save-btn").click(savePost);
+        // 点赞
         $(".posts").on("click", ".post-like", likePost);
     }
     function loadPosts() {
